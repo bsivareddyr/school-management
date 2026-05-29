@@ -6,6 +6,8 @@ import { StudentService } from '../shared/services/student.service';
 import { TeacherService } from '../shared/services/teacher.service';
 import { AttendanceService } from '../shared/services/attendance.service';
 import { FeeService } from '../shared/services/fee.service';
+import { TransportService } from '../shared/services/transport.service';
+import { ExamService } from '../shared/services/exam.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -59,6 +61,25 @@ import { FeeService } from '../shared/services/fee.service';
       </div>
 
       @if (authService.hasRole('admin')) {
+        <div class="stats-grid">
+          <div class="stat-card teal">
+            <div class="stat-icon">🚌</div>
+            <div class="stat-info">
+              <span class="stat-value">{{ totalRoutes() }}</span>
+              <span class="stat-label">Transport Routes</span>
+            </div>
+          </div>
+          <div class="stat-card pink">
+            <div class="stat-icon">📝</div>
+            <div class="stat-info">
+              <span class="stat-value">{{ upcomingExamsCount() }}</span>
+              <span class="stat-label">Upcoming Exams</span>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (authService.hasRole('admin')) {
         <div class="section-grid">
           <div class="section-card">
             <h3>Fee Overview</h3>
@@ -109,6 +130,8 @@ import { FeeService } from '../shared/services/fee.service';
             <div class="quick-links">
               <a routerLink="/attendance" class="quick-link">📋 View Attendance</a>
               <a routerLink="/fees" class="quick-link">💰 View Fee Details</a>
+              <a routerLink="/transport" class="quick-link">🚌 Transport Details</a>
+              <a routerLink="/exams" class="quick-link">📝 View Exams</a>
             </div>
           </div>
         </div>
@@ -121,6 +144,7 @@ import { FeeService } from '../shared/services/fee.service';
             <div class="quick-links">
               <a routerLink="/attendance/mark" class="quick-link">📋 Mark Attendance</a>
               <a routerLink="/students" class="quick-link">🎓 View Students</a>
+              <a routerLink="/exams" class="quick-link">📝 View Exams</a>
             </div>
           </div>
         </div>
@@ -149,6 +173,8 @@ import { FeeService } from '../shared/services/fee.service';
     .stat-card.green { border-left: 4px solid #2e7d32; }
     .stat-card.orange { border-left: 4px solid #e65100; }
     .stat-card.purple { border-left: 4px solid #6a1b9a; }
+    .stat-card.teal { border-left: 4px solid #00695c; }
+    .stat-card.pink { border-left: 4px solid #ad1457; }
     .stat-icon { font-size: 36px; }
     .stat-info { display: flex; flex-direction: column; }
     .stat-value { font-size: 28px; font-weight: 700; color: #333; }
@@ -208,10 +234,14 @@ export class DashboardComponent {
   private teacherService = inject(TeacherService);
   private attendanceService = inject(AttendanceService);
   private feeService = inject(FeeService);
+  private transportService = inject(TransportService);
+  private examService = inject(ExamService);
 
   readonly totalStudents = computed(() => this.studentService.students().filter(s => s.status === 'active').length);
   readonly totalTeachers = computed(() => this.teacherService.teachers().filter(t => t.status === 'active').length);
   readonly feeSummary = this.feeService.summary;
+  readonly totalRoutes = this.transportService.totalActiveRoutes;
+  readonly upcomingExamsCount = computed(() => this.examService.upcomingExams().length);
 
   readonly todaySummary = computed(() => {
     const today = new Date().toISOString().split('T')[0];

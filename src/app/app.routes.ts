@@ -112,6 +112,64 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'transport',
+        canActivate: [roleGuard],
+        data: { roles: ['admin', 'student', 'parent'] },
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./transport/transport-list/transport-list.component').then(m => m.TransportListComponent),
+          },
+          {
+            path: 'new',
+            loadComponent: () => import('./transport/transport-form/transport-form.component').then(m => m.TransportFormComponent),
+            canActivate: [roleGuard],
+            data: { roles: ['admin'] },
+          },
+          {
+            path: ':id',
+            loadComponent: () => import('./transport/transport-detail/transport-detail.component').then(m => m.TransportDetailComponent),
+          },
+          {
+            path: ':id/edit',
+            loadComponent: () => import('./transport/transport-form/transport-form.component').then(m => m.TransportFormComponent),
+            canActivate: [roleGuard],
+            data: { roles: ['admin'] },
+          },
+        ],
+      },
+      {
+        path: 'exams',
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./exams/exam-list/exam-list.component').then(m => m.ExamListComponent),
+          },
+          {
+            path: 'new',
+            loadComponent: () => import('./exams/exam-form/exam-form.component').then(m => m.ExamFormComponent),
+            canActivate: [roleGuard],
+            data: { roles: ['admin'] },
+          },
+          {
+            path: ':id',
+            loadComponent: () => import('./exams/exam-schedule/exam-schedule.component').then(m => m.ExamScheduleComponent),
+          },
+          {
+            path: ':id/edit',
+            loadComponent: () => import('./exams/exam-form/exam-form.component').then(m => m.ExamFormComponent),
+            canActivate: [roleGuard],
+            data: { roles: ['admin'] },
+          },
+          {
+            path: ':id/notify',
+            loadComponent: () => import('./exams/exam-notifications/exam-notifications.component').then(m => m.ExamNotificationsComponent),
+            canActivate: [roleGuard],
+            data: { roles: ['admin'] },
+          },
+        ],
+      },
     ],
   },
   { path: '**', redirectTo: 'dashboard' },

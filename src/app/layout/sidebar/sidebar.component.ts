@@ -84,6 +84,8 @@ export class SidebarComponent {
     { label: 'Attendance', icon: '📋', route: '/attendance', roles: ['admin', 'teacher', 'student', 'parent'] },
     { label: 'Teachers', icon: '👩‍🏫', route: '/teachers', roles: ['admin'] },
     { label: 'Fees', icon: '💰', route: '/fees', roles: ['admin', 'student', 'parent'] },
+    { label: 'Transport', icon: '🚌', route: '/transport', roles: ['admin', 'student', 'parent'] },
+    { label: 'Exams', icon: '📝', route: '/exams', roles: ['admin', 'teacher', 'student', 'parent'] },
   ];
 
   get visibleNavItems(): NavItem[] {

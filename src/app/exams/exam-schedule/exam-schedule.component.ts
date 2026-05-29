@@ -1,0 +1,243 @@
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { TitleCasePipe } from '@angular/common';
+import { ExamService } from '../../shared/services/exam.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { ExamSchedule } from '../../shared/models/exam.model';
+
+@Component({
+  selector: 'app-exam-schedule',
+  standalone: true,
+  imports: [RouterLink, FormsModule, TitleCasePipe],
+  template: `
+    <div class="exam-schedule">
+      <a routerLink="/exams" class="back-link">← Back to Exams</a>
+
+      @if (exam) {
+        <div class="page-header">
+          <div>
+            <h1>{{ exam.name }}</h1>
+            <p class="subtitle">Class {{ exam.class }}-{{ exam.section }} | {{ exam.type.replace('_', ' ') | titlecase }} | {{ exam.academicYear }}</p>
+          </div>
+          @if (authService.hasRole('admin')) {
+            <div class="header-actions">
+              <a [routerLink]="['/exams', exam.id, 'notify']" class="btn-secondary">📧 Notify Parents</a>
+              <a [routerLink]="['/exams', exam.id, 'edit']" class="btn-primary">Edit Exam</a>
+            </div>
+          }
+        </div>
+
+        <div class="info-cards">
+          <div class="info-card">
+            <span class="info-label">Start Date</span>
+            <span class="info-value">{{ exam.startDate }}</span>
+          </div>
+          <div class="info-card">
+            <span class="info-label">End Date</span>
+            <span class="info-value">{{ exam.endDate }}</span>
+          </div>
+          <div class="info-card">
+            <span class="info-label">Status</span>
+            <span class="status-badge" [class]="exam.status">{{ exam.status }}</span>
+          </div>
+          <div class="info-card">
+            <span class="info-label">Created By</span>
+            <span class="info-value">{{ exam.createdBy }}</span>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <h2>Exam Schedule</h2>
+          @if (authService.hasRole('admin') && !showAddForm) {
+            <button class="btn-secondary" (click)="showAddForm = true">+ Add Subject</button>
+          }
+        </div>
+
+        @if (showAddForm && authService.hasRole('admin')) {
+          <div class="add-form-card">
+            <h3>Add Subject to Schedule</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Subject *</label>
+                <input type="text" [(ngModel)]="newSchedule.subject" placeholder="e.g. Mathematics" />
+              </div>
+              <div class="form-group">
+                <label>Date *</label>
+                <input type="date" [(ngModel)]="newSchedule.date" />
+              </div>
+              <div class="form-group">
+                <label>Start Time *</label>
+                <input type="time" [(ngModel)]="newSchedule.startTime" />
+              </div>
+              <div class="form-group">
+                <label>End Time *</label>
+                <input type="time" [(ngModel)]="newSchedule.endTime" />
+              </div>
+              <div class="form-group">
+                <label>Room *</label>
+                <input type="text" [(ngModel)]="newSchedule.room" placeholder="e.g. Hall A" />
+              </div>
+              <div class="form-group">
+                <label>Max Marks *</label>
+                <input type="number" [(ngModel)]="newSchedule.maxMarks" />
+              </div>
+              <div class="form-group">
+                <label>Passing Marks *</label>
+                <input type="number" [(ngModel)]="newSchedule.passingMarks" />
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn-cancel" (click)="showAddForm = false">Cancel</button>
+              <button class="btn-primary" (click)="addScheduleEntry()">Add Subject</button>
+            </div>
+          </div>
+        }
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Room</th>
+                <th>Max Marks</th>
+                <th>Pass Marks</th>
+                @if (authService.hasRole('admin')) {
+                  <th>Actions</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (schedule of schedules; track schedule.id) {
+                <tr>
+                  <td class="subject-name">{{ schedule.subject }}</td>
+                  <td>{{ schedule.date }}</td>
+                  <td>{{ schedule.startTime }}</td>
+                  <td>{{ schedule.endTime }}</td>
+                  <td>{{ schedule.room }}</td>
+                  <td>{{ schedule.maxMarks }}</td>
+                  <td>{{ schedule.passingMarks }}</td>
+                  @if (authService.hasRole('admin')) {
+                    <td>
+                      <button class="btn-icon delete" (click)="deleteScheduleEntry(schedule.id)" title="Remove">🗑</button>
+                    </td>
+                  }
+                </tr>
+              } @empty {
+                <tr><td colspan="8" class="no-data">No schedule entries yet. Add subjects above.</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (notifications.length > 0) {
+          <h2 class="section-title">Notifications Sent</h2>
+          <div class="notifications-list">
+            @for (notif of notifications; track notif.id) {
+              <div class="notif-card">
+                <div class="notif-header">
+                  <span class="notif-badge" [class]="notif.status">{{ notif.status }}</span>
+                  <span class="notif-date">{{ notif.sentAt }}</span>
+                </div>
+                <p class="notif-message">{{ notif.message }}</p>
+                <div class="notif-footer">
+                  <span>To: {{ notif.targetClass }} parents</span>
+                  <span>By: {{ notif.sentBy }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      } @else {
+        <p class="no-data">Exam not found</p>
+      }
+    </div>
+  `,
+  styles: [`
+    .back-link { color: #1a237e; text-decoration: none; font-size: 14px; }
+    .back-link:hover { text-decoration: underline; }
+    .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin: 12px 0 20px; }
+    .page-header h1 { margin: 0; color: #1a237e; }
+    .subtitle { color: #666; margin: 4px 0 0; font-size: 14px; text-transform: capitalize; }
+    .header-actions { display: flex; gap: 8px; }
+    .btn-primary { background: #1a237e; color: #fff; padding: 10px 20px; border: none; border-radius: 8px; text-decoration: none; font-weight: 600; cursor: pointer; }
+    .btn-secondary { background: #fff; color: #1a237e; padding: 10px 20px; border: 1px solid #1a237e; border-radius: 8px; text-decoration: none; font-weight: 600; cursor: pointer; }
+    .info-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .info-card { background: #fff; border-radius: 10px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 4px; }
+    .info-label { font-size: 12px; color: #666; text-transform: uppercase; }
+    .info-value { font-size: 15px; font-weight: 600; color: #333; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .section-header h2, .section-title { margin: 24px 0 16px; color: #1a237e; font-size: 18px; }
+    .add-form-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #1a237e; }
+    .add-form-card h3 { margin: 0 0 16px; color: #1a237e; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 12px; font-weight: 600; color: #333; }
+    input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+    input:focus { outline: none; border-color: #1a237e; }
+    .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+    .btn-cancel { padding: 8px 20px; border: 1px solid #ddd; border-radius: 6px; background: #fff; color: #666; cursor: pointer; }
+    .table-container { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #f5f5f5; padding: 12px 16px; text-align: left; font-size: 13px; color: #666; text-transform: uppercase; }
+    td { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+    .subject-name { font-weight: 500; color: #333; }
+    .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; text-transform: capitalize; }
+    .status-badge.scheduled { background: #e3f2fd; color: #1565c0; }
+    .status-badge.ongoing { background: #fff3e0; color: #e65100; }
+    .status-badge.completed { background: #e8f5e9; color: #2e7d32; }
+    .status-badge.cancelled { background: #ffebee; color: #c62828; }
+    .btn-icon { background: none; border: none; cursor: pointer; font-size: 16px; padding: 4px 6px; border-radius: 4px; }
+    .btn-icon.delete:hover { background: #ffebee; }
+    .notifications-list { display: flex; flex-direction: column; gap: 12px; }
+    .notif-card { background: #fff; border-radius: 10px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #2e7d32; }
+    .notif-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .notif-badge { padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: 600; text-transform: capitalize; }
+    .notif-badge.sent { background: #e8f5e9; color: #2e7d32; }
+    .notif-badge.pending { background: #fff3e0; color: #e65100; }
+    .notif-date { font-size: 12px; color: #999; }
+    .notif-message { color: #333; font-size: 14px; margin: 0 0 8px; }
+    .notif-footer { display: flex; justify-content: space-between; font-size: 12px; color: #666; }
+    .no-data { text-align: center; color: #999; font-style: italic; padding: 40px !important; }
+  `]
+})
+export class ExamScheduleComponent {
+  private activatedRoute = inject(ActivatedRoute);
+  private examService = inject(ExamService);
+  readonly authService = inject(AuthService);
+
+  exam = this.examService.getExamById(Number(this.activatedRoute.snapshot.paramMap.get('id')));
+  schedules = this.exam ? this.examService.getSchedulesByExamId(this.exam.id) : [];
+  notifications = this.exam ? this.examService.getNotificationsByExamId(this.exam.id) : [];
+
+  showAddForm = false;
+
+  newSchedule: Omit<ExamSchedule, 'id'> = {
+    examId: this.exam?.id ?? 0,
+    subject: '', date: '', startTime: '09:00', endTime: '12:00',
+    room: '', maxMarks: 100, passingMarks: 35,
+  };
+
+  addScheduleEntry(): void {
+    if (this.newSchedule.subject && this.newSchedule.date && this.newSchedule.room) {
+      this.examService.addSchedule(this.newSchedule);
+      this.schedules = this.examService.getSchedulesByExamId(this.exam!.id);
+      this.newSchedule = {
+        examId: this.exam!.id,
+        subject: '', date: '', startTime: '09:00', endTime: '12:00',
+        room: '', maxMarks: 100, passingMarks: 35,
+      };
+      this.showAddForm = false;
+    }
+  }
+
+  deleteScheduleEntry(id: number): void {
+    if (confirm('Remove this subject from the schedule?')) {
+      this.examService.deleteSchedule(id);
+      this.schedules = this.examService.getSchedulesByExamId(this.exam!.id);
+    }
+  }
+}
