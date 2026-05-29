@@ -18,25 +18,34 @@ import { AuthService } from '../../shared/services/auth.service';
       </div>
 
       <div class="stats-grid">
-        <div class="stat-card blue">
-          <span class="stat-icon">📝</span>
-          <div class="stat-info">
-            <span class="stat-value">{{ examService.totalExams() }}</span>
-            <span class="stat-label">Total Exams</span>
+        <div class="stat-card gradient-blue">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Total Exams</span>
+              <span class="stat-value">{{ examService.totalExams() }}</span>
+              <span class="stat-change">All examinations</span>
+            </div>
+            <div class="stat-icon-wrap">📝</div>
           </div>
         </div>
-        <div class="stat-card orange">
-          <span class="stat-icon">📅</span>
-          <div class="stat-info">
-            <span class="stat-value">{{ examService.upcomingExams().length }}</span>
-            <span class="stat-label">Upcoming</span>
+        <div class="stat-card gradient-orange">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Upcoming</span>
+              <span class="stat-value">{{ examService.upcomingExams().length }}</span>
+              <span class="stat-change">Scheduled exams</span>
+            </div>
+            <div class="stat-icon-wrap">📅</div>
           </div>
         </div>
-        <div class="stat-card green">
-          <span class="stat-icon">✅</span>
-          <div class="stat-info">
-            <span class="stat-value">{{ examService.completedExams().length }}</span>
-            <span class="stat-label">Completed</span>
+        <div class="stat-card gradient-green">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Completed</span>
+              <span class="stat-value">{{ examService.completedExams().length }}</span>
+              <span class="stat-change positive">Finished exams</span>
+            </div>
+            <div class="stat-icon-wrap">✅</div>
           </div>
         </div>
       </div>
@@ -124,15 +133,42 @@ import { AuthService } from '../../shared/services/auth.service';
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .page-header h1 { margin: 0; color: var(--primary); }
     .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .stat-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: var(--card-shadow); }
-    .stat-card.blue { border-left: 4px solid #1565c0; }
-    .stat-card.orange { border-left: 4px solid #e65100; }
-    .stat-card.green { border-left: 4px solid #2e7d32; }
-    .stat-icon { font-size: 32px; }
-    .stat-info { display: flex; flex-direction: column; }
-    .stat-value { font-size: 24px; font-weight: 700; color: var(--text-primary); }
-    .stat-label { font-size: 12px; color: var(--text-secondary); }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      border-radius: var(--card-radius);
+      padding: 24px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0.1;
+      transform: translate(30%, -30%);
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); }
+    .gradient-blue { background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff; }
+    .gradient-orange { background: linear-gradient(135deg, #d97706, #f59e0b); color: #fff; }
+    .gradient-green { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+    .stat-card-inner { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+    .stat-info { display: flex; flex-direction: column; gap: 4px; }
+    .stat-label { font-size: 13px; opacity: 0.85; font-weight: 500; }
+    .stat-value { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+    .stat-change { font-size: 12px; opacity: 0.7; font-weight: 500; }
+    .stat-change.positive { opacity: 0.9; }
+    .stat-icon-wrap {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+    }
     .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
     th { background: #f8fafc; padding: 14px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid var(--border-color); }
