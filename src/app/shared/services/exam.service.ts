@@ -62,7 +62,29 @@ export class ExamService {
     { id: 25, scheduleId: 5, questionNumber: 5, questionText: 'Which language is primarily used for styling web pages?', type: 'mcq', options: ['HTML', 'JavaScript', 'CSS', 'Python'], correctAnswer: 'CSS', marks: 4 },
   ]);
 
-  private submissionsData = signal<ExamSubmission[]>([]);
+  private submissionsData = signal<ExamSubmission[]>([
+    {
+      id: 1, examId: 5, scheduleId: 8, studentId: 3, studentName: 'Alice Johnson',
+      answers: [
+        { questionId: 100, answer: '42', isCorrect: false, marksAwarded: 0 },
+      ],
+      totalMarks: 50, obtainedMarks: 38, submittedAt: '2026-04-01', status: 'graded',
+    },
+    {
+      id: 2, examId: 5, scheduleId: 9, studentId: 3, studentName: 'Alice Johnson',
+      answers: [
+        { questionId: 101, answer: 'Photosynthesis', isCorrect: true, marksAwarded: 10 },
+      ],
+      totalMarks: 50, obtainedMarks: 42, submittedAt: '2026-04-02', status: 'graded',
+    },
+    {
+      id: 3, examId: 5, scheduleId: 10, studentId: 3, studentName: 'Alice Johnson',
+      answers: [
+        { questionId: 102, answer: 'wrote', isCorrect: true, marksAwarded: 5 },
+      ],
+      totalMarks: 50, obtainedMarks: 35, submittedAt: '2026-04-03', status: 'graded',
+    },
+  ]);
 
   readonly exams = this.examsData.asReadonly();
   readonly schedules = this.schedulesData.asReadonly();

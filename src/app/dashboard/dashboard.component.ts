@@ -124,14 +124,86 @@ import { ExamService } from '../shared/services/exam.service';
       }
 
       @if (authService.hasRole('student', 'parent')) {
+        <div class="stats-grid">
+          <div class="stat-card blue">
+            <div class="stat-icon">📝</div>
+            <div class="stat-info">
+              <span class="stat-value">{{ studentExamsTaken() }}</span>
+              <span class="stat-label">Exams Taken</span>
+            </div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-info">
+              <span class="stat-value">{{ studentAvgScore() }}%</span>
+              <span class="stat-label">Average Score</span>
+            </div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+              <span class="stat-value">{{ studentPassedCount() }} / {{ studentExamsTaken() }}</span>
+              <span class="stat-label">Passed</span>
+            </div>
+          </div>
+          <div class="stat-card purple">
+            <div class="stat-icon">📅</div>
+            <div class="stat-info">
+              <span class="stat-value">{{ studentUpcomingExams() }}</span>
+              <span class="stat-label">Upcoming Exams</span>
+            </div>
+          </div>
+        </div>
+
         <div class="section-grid">
+          <div class="section-card">
+            <h3>Exam Results</h3>
+            @if (studentResults().length > 0) {
+              <div class="results-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Exam</th>
+                      <th>Subject</th>
+                      <th>Marks</th>
+                      <th>Percentage</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (result of studentResults(); track result.submissionId) {
+                      <tr>
+                        <td class="exam-name">{{ result.examName }}</td>
+                        <td>{{ result.subject }}</td>
+                        <td class="marks">{{ result.obtained }} / {{ result.total }}</td>
+                        <td>
+                          <div class="score-bar-container">
+                            <div class="score-bar" [style.width.%]="result.percentage" [class.pass]="result.passed" [class.fail]="!result.passed"></div>
+                            <span class="score-text">{{ result.percentage }}%</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="result-badge" [class.pass]="result.passed" [class.fail]="!result.passed">
+                            {{ result.passed ? 'PASSED' : 'FAILED' }}
+                          </span>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            } @else {
+              <p class="no-data">No exam results yet. Take your first exam!</p>
+            }
+          </div>
+
           <div class="section-card">
             <h3>Quick Links</h3>
             <div class="quick-links">
+              <a routerLink="/exams" class="quick-link">📝 View Exams</a>
               <a routerLink="/attendance" class="quick-link">📋 View Attendance</a>
               <a routerLink="/fees" class="quick-link">💰 View Fee Details</a>
               <a routerLink="/transport" class="quick-link">🚌 Transport Details</a>
-              <a routerLink="/exams" class="quick-link">📝 View Exams</a>
             </div>
           </div>
         </div>
@@ -226,6 +298,20 @@ import { ExamService } from '../shared/services/exam.service';
       transition: background 0.2s;
     }
     .quick-link:hover { background: #e8eaf6; }
+    .results-table { overflow-x: auto; }
+    .results-table table { width: 100%; border-collapse: collapse; }
+    .results-table th { text-align: left; padding: 10px 12px; font-size: 12px; color: #888; text-transform: uppercase; border-bottom: 2px solid #f0f0f0; }
+    .results-table td { padding: 10px 12px; border-bottom: 1px solid #f5f5f5; font-size: 14px; }
+    .results-table .exam-name { font-weight: 500; color: #333; }
+    .results-table .marks { font-weight: 600; color: #1a237e; }
+    .score-bar-container { display: flex; align-items: center; gap: 8px; }
+    .score-bar { height: 8px; border-radius: 4px; min-width: 4px; transition: width 0.3s; }
+    .score-bar.pass { background: linear-gradient(90deg, #66bb6a, #43a047); }
+    .score-bar.fail { background: linear-gradient(90deg, #ef5350, #e53935); }
+    .score-text { font-size: 13px; font-weight: 600; color: #555; white-space: nowrap; }
+    .result-badge { padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+    .result-badge.pass { background: #e8f5e9; color: #2e7d32; }
+    .result-badge.fail { background: #ffebee; color: #c62828; }
   `]
 })
 export class DashboardComponent {
@@ -254,5 +340,48 @@ export class DashboardComponent {
     const total = summaries.reduce((sum, s) => sum + s.totalStudents, 0);
     const present = summaries.reduce((sum, s) => sum + s.present, 0);
     return total > 0 ? Math.round((present / total) * 100) : 0;
+  });
+
+  private readonly studentId = computed(() => this.authService.user()?.id ?? 0);
+
+  readonly studentSubmissions = computed(() => this.examService.getSubmissionsByStudent(this.studentId()));
+
+  readonly studentExamsTaken = computed(() => this.studentSubmissions().length);
+
+  readonly studentAvgScore = computed(() => {
+    const subs = this.studentSubmissions();
+    if (subs.length === 0) return 0;
+    const avg = subs.reduce((sum, s) => sum + (s.totalMarks > 0 ? (s.obtainedMarks / s.totalMarks) * 100 : 0), 0) / subs.length;
+    return Math.round(avg);
+  });
+
+  readonly studentPassedCount = computed(() => {
+    const subs = this.studentSubmissions();
+    return subs.filter(sub => {
+      const schedule = this.examService.getSchedulesByExamId(sub.examId).find(s => s.id === sub.scheduleId);
+      return schedule ? sub.obtainedMarks >= schedule.passingMarks : false;
+    }).length;
+  });
+
+  readonly studentUpcomingExams = computed(() => this.examService.upcomingExams().length);
+
+  readonly studentResults = computed(() => {
+    const subs = this.studentSubmissions();
+    return subs.map(sub => {
+      const exam = this.examService.getExamById(sub.examId);
+      const schedule = this.examService.getSchedulesByExamId(sub.examId).find(s => s.id === sub.scheduleId);
+      const percentage = sub.totalMarks > 0 ? Math.round((sub.obtainedMarks / sub.totalMarks) * 100) : 0;
+      const passed = schedule ? sub.obtainedMarks >= schedule.passingMarks : false;
+      return {
+        submissionId: sub.id,
+        examName: exam?.name ?? 'Unknown Exam',
+        subject: schedule?.subject ?? 'Unknown',
+        obtained: sub.obtainedMarks,
+        total: sub.totalMarks,
+        percentage,
+        passed,
+        date: sub.submittedAt,
+      };
+    });
   });
 }
