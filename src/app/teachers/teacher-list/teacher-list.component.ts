@@ -15,6 +15,31 @@ import { CurrencyPipe } from '@angular/common';
         <a routerLink="/teachers/new" class="btn-primary">+ Add Teacher</a>
       </div>
 
+      <div class="stats-grid">
+        <div class="stat-card gradient-blue">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Total Teachers</span>
+              <span class="stat-value">{{ totalTeachers() }}</span>
+              <span class="stat-change">All faculty</span>
+            </div>
+            <div class="stat-icon-wrap">👩‍🏫</div>
+          </div>
+        </div>
+        @for (subj of subjectCounts(); track subj.subject; let i = $index) {
+          <div class="stat-card" [class]="'gradient-' + subj.color">
+            <div class="stat-card-inner">
+              <div class="stat-info">
+                <span class="stat-label">{{ subj.subject }}</span>
+                <span class="stat-value">{{ subj.count }}</span>
+                <span class="stat-change">{{ subj.count === 1 ? 'Teacher' : 'Teachers' }}</span>
+              </div>
+              <div class="stat-icon-wrap">{{ subj.icon }}</div>
+            </div>
+          </div>
+        }
+      </div>
+
       <div class="table-container">
         <table>
           <thead>
@@ -83,6 +108,45 @@ import { CurrencyPipe } from '@angular/common';
     .page-header h1 { margin: 0; color: var(--text-primary); font-weight: 800; }
     .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; transition: var(--transition); }
     .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      border-radius: var(--card-radius);
+      padding: 24px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0.1;
+      transform: translate(30%, -30%);
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); }
+    .gradient-blue { background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff; }
+    .gradient-green { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+    .gradient-orange { background: linear-gradient(135deg, #d97706, #f59e0b); color: #fff; }
+    .gradient-purple { background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: #fff; }
+    .gradient-teal { background: linear-gradient(135deg, #0891b2, #06b6d4); color: #fff; }
+    .gradient-red { background: linear-gradient(135deg, #dc2626, #ef4444); color: #fff; }
+    .gradient-pink { background: linear-gradient(135deg, #db2777, #ec4899); color: #fff; }
+    .stat-card-inner { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+    .stat-info { display: flex; flex-direction: column; gap: 4px; }
+    .stat-label { font-size: 13px; opacity: 0.85; font-weight: 500; }
+    .stat-value { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+    .stat-change { font-size: 12px; opacity: 0.7; font-weight: 500; }
+    .stat-icon-wrap {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+    }
     .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
     th { background: #f8fafc; padding: 14px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid var(--border-color); }
@@ -105,6 +169,29 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class TeacherListComponent {
   private teacherService = inject(TeacherService);
+
+  private readonly subjectIcons: Record<string, string> = {
+    'Mathematics': '📊', 'Statistics': '📈', 'English': '📚', 'Literature': '📖',
+    'Physics': '⚗️', 'Chemistry': '🧪', 'General Science': '🔬', 'History': '🏛️',
+    'Social Studies': '🌍', 'Computer Science': '💻', 'ICT': '🖥️',
+  };
+  private readonly gradientColors = ['green', 'orange', 'purple', 'teal', 'red', 'pink', 'blue'];
+
+  readonly totalTeachers = computed(() => this.teacherService.teachers().length);
+
+  readonly subjectCounts = computed(() => {
+    const teachers = this.teacherService.teachers();
+    const subjectMap = new Map<string, number>();
+    teachers.forEach(t => t.subjects.forEach(s => subjectMap.set(s, (subjectMap.get(s) || 0) + 1)));
+    return Array.from(subjectMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map((entry, i) => ({
+        subject: entry[0],
+        count: entry[1],
+        icon: this.subjectIcons[entry[0]] || '📘',
+        color: this.gradientColors[i % this.gradientColors.length],
+      }));
+  });
 
   searchTerm = '';
   filterEmail = '';
