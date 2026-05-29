@@ -550,7 +550,7 @@ import { ExamService } from '../shared/services/exam.service';
     /* Results Table */
     .results-table { overflow-x: auto; }
     .results-table table { width: 100%; border-collapse: collapse; }
-    .results-table th { text-align: left; padding: 12px 14px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; border: 1px solid var(--border-color); background: #f8fafc; }
+    .results-table th { text-align: left; padding: 12px 14px; font-size: 11px; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; border: 1px solid #4338ca; background: linear-gradient(135deg, #4f46e5, #6366f1); }
     .results-table td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
     .results-table .exam-name { font-weight: 600; color: var(--text-primary); }
     .results-table .marks { font-weight: 700; color: var(--primary); }

@@ -192,7 +192,7 @@ import { ExamSchedule } from '../../shared/models/exam.model';
     .btn-cancel { padding: 8px 20px; border: 1.5px solid var(--input-border); border-radius: 6px; background: var(--card-bg); color: var(--text-secondary); cursor: pointer; }
     .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
-    th { background: #f8fafc; padding: 14px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid var(--border-color); }
+    th { background: linear-gradient(135deg, #4f46e5, #6366f1); padding: 14px 16px; text-align: left; font-size: 11px; color: #fff; text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid #4338ca; }
     td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
     tbody tr:hover { background: #f8fafc; }
     .subject-name { font-weight: 600; color: var(--text-primary); }

@@ -126,7 +126,7 @@ interface StudentAttendanceEntry {
     .btn-quick.red { background: #c62828; }
     .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); }
     table { width: 100%; border-collapse: collapse; }
-    th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; border: 1px solid var(--border-color); }
+    th { background: linear-gradient(135deg, #4f46e5, #6366f1); padding: 12px 16px; text-align: left; font-size: 13px; color: #fff; text-transform: uppercase; border: 1px solid #4338ca; }
     td { padding: 14px 16px; border: 1px solid var(--border-color); }
     .absent-row { background: #fff8f8; }
     .student-name { font-weight: 600; }

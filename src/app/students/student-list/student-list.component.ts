@@ -193,15 +193,15 @@ import { AuthService } from '../../shared/services/auth.service';
     }
     table { width: 100%; border-collapse: collapse; }
     th {
-      background: #f8fafc;
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
       padding: 14px 16px;
       text-align: left;
       font-size: 11px;
-      color: var(--text-muted);
+      color: #fff;
       text-transform: uppercase;
       letter-spacing: 0.7px;
       font-weight: 700;
-      border: 1px solid var(--border-color);
+      border: 1px solid #4338ca;
     }
     td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; color: var(--text-primary); }
     tbody tr:hover { background: #f8fafc; }

@@ -125,7 +125,7 @@ import { AuthService } from '../../shared/services/auth.service';
     .status-badge.inactive { background: var(--danger-bg); color: var(--danger); }
     .status-badge.maintenance { background: var(--warning-bg); color: var(--accent-dark); }
     table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-    th { background: #f8fafc; padding: 10px 14px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; border: 1px solid var(--border-color); }
+    th { background: linear-gradient(135deg, #4f46e5, #6366f1); padding: 10px 14px; text-align: left; font-size: 13px; color: #fff; text-transform: uppercase; border: 1px solid #4338ca; }
     td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
     .no-data { text-align: center; color: var(--text-muted); font-style: italic; }
   `]
