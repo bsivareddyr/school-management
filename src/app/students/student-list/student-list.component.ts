@@ -50,6 +50,47 @@ import { AuthService } from '../../shared/services/auth.service';
         </div>
       </div>
 
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>Name</label>
+          <input type="text" [(ngModel)]="searchTerm" placeholder="Search name..." />
+        </div>
+        <div class="filter-group">
+          <label>Class</label>
+          <select [(ngModel)]="filterClass">
+            <option value="">All Classes</option>
+            @for (cls of studentService.classes(); track cls) {
+              <option [value]="cls">{{ cls }}</option>
+            }
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Section</label>
+          <select [(ngModel)]="filterSection">
+            <option value="">All Sections</option>
+            @for (sec of ['A','B','C','D']; track sec) {
+              <option [value]="sec">{{ sec }}</option>
+            }
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Status</label>
+          <select [(ngModel)]="filterStatus">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>&nbsp;</label>
+          <button class="btn-apply" (click)="applyFilters()">Apply</button>
+        </div>
+        <div class="filter-group">
+          <label>&nbsp;</label>
+          <button class="btn-reset" (click)="resetFilters()">Reset</button>
+        </div>
+      </div>
+
       <div class="table-container">
         <table>
           <thead>
@@ -62,36 +103,6 @@ import { AuthService } from '../../shared/services/auth.service';
               <th>Phone</th>
               <th>Status</th>
               <th>Actions</th>
-            </tr>
-            <tr class="filter-row">
-              <td><input type="text" [(ngModel)]="filterRoll" placeholder="Filter..." class="th-filter" /></td>
-              <td><input type="text" [(ngModel)]="searchTerm" placeholder="Filter..." class="th-filter" /></td>
-              <td>
-                <select [(ngModel)]="filterClass" class="th-filter">
-                  <option value="">All</option>
-                  @for (cls of studentService.classes(); track cls) {
-                    <option [value]="cls">{{ cls }}</option>
-                  }
-                </select>
-              </td>
-              <td>
-                <select [(ngModel)]="filterSection" class="th-filter">
-                  <option value="">All</option>
-                  @for (sec of ['A','B','C','D']; track sec) {
-                    <option [value]="sec">{{ sec }}</option>
-                  }
-                </select>
-              </td>
-              <td><input type="text" [(ngModel)]="filterParent" placeholder="Filter..." class="th-filter" /></td>
-              <td></td>
-              <td>
-                <select [(ngModel)]="filterStatus" class="th-filter">
-                  <option value="">All</option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </td>
-              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -184,6 +195,28 @@ import { AuthService } from '../../shared/services/auth.service';
       border: none;
     }
     .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+    .filter-bar {
+      display: flex; gap: 16px; align-items: flex-end; margin-bottom: 20px; padding: 20px;
+      background: var(--card-bg); border-radius: var(--card-radius); box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-color); flex-wrap: wrap;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; }
+    .filter-group label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .filter-group select, .filter-group input {
+      padding: 10px 14px; border: 1.5px solid var(--input-border); border-radius: 8px;
+      font-size: 14px; background: #fff; transition: var(--transition); min-width: 160px;
+    }
+    .filter-group select:focus, .filter-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+    .btn-apply {
+      padding: 10px 28px; background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff;
+      border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: var(--transition);
+    }
+    .btn-apply:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+    .btn-reset {
+      padding: 10px 28px; background: #fff; color: var(--text-primary);
+      border: 1.5px solid var(--input-border); border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition);
+    }
+    .btn-reset:hover { border-color: var(--primary); color: var(--primary); }
     .table-container {
       background: var(--card-bg);
       border-radius: var(--card-radius);
@@ -205,21 +238,6 @@ import { AuthService } from '../../shared/services/auth.service';
     }
     td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; color: var(--text-primary); }
     tbody tr:hover { background: #f8fafc; }
-    .filter-row td {
-      padding: 8px 10px;
-      background: #f1f5f9;
-      border: 1px solid var(--border-color);
-    }
-    .th-filter {
-      width: 100%;
-      padding: 6px 10px;
-      border: 1.5px solid var(--input-border);
-      border-radius: 6px;
-      font-size: 13px;
-      background: #fff;
-      transition: var(--transition);
-    }
-    .th-filter:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1); }
     .student-name { color: var(--primary); text-decoration: none; font-weight: 600; }
     .student-name:hover { text-decoration: underline; }
     .status-badge {
@@ -252,44 +270,57 @@ export class StudentListComponent {
   readonly authService = inject(AuthService);
 
   searchTerm = '';
-  filterRoll = '';
   filterClass = '';
   filterSection = '';
-  filterParent = '';
   filterStatus = '';
+
+  appliedSearch = '';
+  appliedClass = '';
+  appliedSection = '';
+  appliedStatus = '';
+
+  filterTrigger = signal(0);
 
   readonly totalStudents = computed(() => this.studentService.students().length);
   readonly activeStudents = computed(() => this.studentService.students().filter(s => s.status === 'active').length);
   readonly inactiveStudents = computed(() => this.studentService.students().filter(s => s.status === 'inactive').length);
 
   readonly filteredStudents = computed(() => {
+    const trigger = this.filterTrigger();
     let students = this.studentService.students();
-    const search = this.searchTerm.toLowerCase();
-    const roll = this.filterRoll.toLowerCase();
-    const parent = this.filterParent.toLowerCase();
-
-    if (search) {
+    if (this.appliedSearch) {
+      const search = this.appliedSearch.toLowerCase();
       students = students.filter(s =>
         `${s.firstName} ${s.lastName}`.toLowerCase().includes(search)
       );
     }
-    if (roll) {
-      students = students.filter(s => s.rollNumber.toLowerCase().includes(roll));
+    if (this.appliedClass) {
+      students = students.filter(s => s.class === this.appliedClass);
     }
-    if (this.filterClass) {
-      students = students.filter(s => s.class === this.filterClass);
+    if (this.appliedSection) {
+      students = students.filter(s => s.section === this.appliedSection);
     }
-    if (this.filterSection) {
-      students = students.filter(s => s.section === this.filterSection);
-    }
-    if (parent) {
-      students = students.filter(s => s.parentName.toLowerCase().includes(parent));
-    }
-    if (this.filterStatus) {
-      students = students.filter(s => s.status === this.filterStatus);
+    if (this.appliedStatus) {
+      students = students.filter(s => s.status === this.appliedStatus);
     }
     return students;
   });
+
+  applyFilters(): void {
+    this.appliedSearch = this.searchTerm;
+    this.appliedClass = this.filterClass;
+    this.appliedSection = this.filterSection;
+    this.appliedStatus = this.filterStatus;
+    this.filterTrigger.update(v => v + 1);
+  }
+
+  resetFilters(): void {
+    this.searchTerm = '';
+    this.filterClass = '';
+    this.filterSection = '';
+    this.filterStatus = '';
+    this.applyFilters();
+  }
 
   deleteStudent(id: number): void {
     if (confirm('Are you sure you want to delete this student?')) {

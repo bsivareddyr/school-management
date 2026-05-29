@@ -71,6 +71,29 @@ import { AuthService } from '../../shared/services/auth.service';
       </div>
 
       @if (activeTab() === 'routes') {
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label>Route Name</label>
+            <input type="text" [(ngModel)]="filterRouteName" placeholder="Search route..." />
+          </div>
+          <div class="filter-group">
+            <label>Status</label>
+            <select [(ngModel)]="filterRouteStatus">
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>&nbsp;</label>
+            <button class="btn-apply" (click)="applyFilters()">Apply</button>
+          </div>
+          <div class="filter-group">
+            <label>&nbsp;</label>
+            <button class="btn-reset" (click)="resetFilters()">Reset</button>
+          </div>
+        </div>
+
         <div class="table-container">
           <table>
             <thead>
@@ -89,30 +112,9 @@ import { AuthService } from '../../shared/services/auth.service';
                   <th>Actions</th>
                 }
               </tr>
-              <tr class="filter-row">
-                <td></td>
-                <td><input type="text" [(ngModel)]="filterRouteName" placeholder="Filter..." class="th-filter" /></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                  <select [(ngModel)]="filterRouteStatus" class="th-filter">
-                    <option value="">All</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
-                </td>
-                @if (authService.hasRole('admin')) {
-                  <td></td>
-                }
-              </tr>
             </thead>
             <tbody>
-              @for (route of transportService.routes(); track route.id) {
+              @for (route of filteredRoutes(); track route.id) {
                 <tr>
                   <td>{{ route.routeNumber }}</td>
                   <td>
@@ -253,14 +255,33 @@ import { AuthService } from '../../shared/services/auth.service';
     .tab-buttons { display: flex; gap: 8px; }
     .tab-buttons button { padding: 8px 16px; border: 1px solid var(--primary); border-radius: 6px; background: var(--card-bg); color: var(--primary); cursor: pointer; font-weight: 600; transition: var(--transition); }
     .tab-buttons button.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; }
+    .filter-bar {
+      display: flex; gap: 16px; align-items: flex-end; margin-bottom: 20px; padding: 20px;
+      background: var(--card-bg); border-radius: var(--card-radius); box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-color); flex-wrap: wrap;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; }
+    .filter-group label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .filter-group select, .filter-group input {
+      padding: 10px 14px; border: 1.5px solid var(--input-border); border-radius: 8px;
+      font-size: 14px; background: #fff; transition: var(--transition); min-width: 160px;
+    }
+    .filter-group select:focus, .filter-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+    .btn-apply {
+      padding: 10px 28px; background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff;
+      border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: var(--transition);
+    }
+    .btn-apply:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+    .btn-reset {
+      padding: 10px 28px; background: #fff; color: var(--text-primary);
+      border: 1.5px solid var(--input-border); border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition);
+    }
+    .btn-reset:hover { border-color: var(--primary); color: var(--primary); }
     .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
     th { background: linear-gradient(135deg, #4f46e5, #6366f1); padding: 14px 16px; text-align: left; font-size: 11px; color: #fff; text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid #4338ca; }
     td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
     tbody tr:hover { background: #f8fafc; }
-    .filter-row td { padding: 8px 10px; background: #f1f5f9; border: 1px solid var(--border-color); }
-    .th-filter { width: 100%; padding: 6px 10px; border: 1.5px solid var(--input-border); border-radius: 6px; font-size: 13px; background: #fff; transition: var(--transition); }
-    .th-filter:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1); }
     .route-name, .driver-name, .vehicle-number { color: var(--primary); font-weight: 600; text-decoration: none; }
     .route-name:hover { text-decoration: underline; }
     .capitalize { text-transform: capitalize; }
@@ -282,6 +303,35 @@ export class TransportListComponent {
   activeTab = signal<'routes' | 'drivers' | 'vehicles'>('routes');
   filterRouteName = '';
   filterRouteStatus = '';
+
+  appliedRouteName = '';
+  appliedRouteStatus = '';
+  filterTrigger = signal(0);
+
+  readonly filteredRoutes = computed(() => {
+    const trigger = this.filterTrigger();
+    let routes = this.transportService.routes();
+    if (this.appliedRouteName) {
+      const name = this.appliedRouteName.toLowerCase();
+      routes = routes.filter(r => r.routeName.toLowerCase().includes(name));
+    }
+    if (this.appliedRouteStatus) {
+      routes = routes.filter(r => r.status === this.appliedRouteStatus);
+    }
+    return routes;
+  });
+
+  applyFilters(): void {
+    this.appliedRouteName = this.filterRouteName;
+    this.appliedRouteStatus = this.filterRouteStatus;
+    this.filterTrigger.update(v => v + 1);
+  }
+
+  resetFilters(): void {
+    this.filterRouteName = '';
+    this.filterRouteStatus = '';
+    this.applyFilters();
+  }
 
   getVehicleNumber(routeId: number): string {
     const vehicle = this.transportService.getVehicleForRoute(routeId);

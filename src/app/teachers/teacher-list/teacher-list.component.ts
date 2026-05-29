@@ -40,6 +40,33 @@ import { CurrencyPipe } from '@angular/common';
         }
       </div>
 
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>Name</label>
+          <input type="text" [(ngModel)]="searchTerm" placeholder="Search name..." />
+        </div>
+        <div class="filter-group">
+          <label>Subject</label>
+          <input type="text" [(ngModel)]="filterSubject" placeholder="Search subject..." />
+        </div>
+        <div class="filter-group">
+          <label>Status</label>
+          <select [(ngModel)]="filterStatus">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>&nbsp;</label>
+          <button class="btn-apply" (click)="applyFilters()">Apply</button>
+        </div>
+        <div class="filter-group">
+          <label>&nbsp;</label>
+          <button class="btn-reset" (click)="resetFilters()">Reset</button>
+        </div>
+      </div>
+
       <div class="table-container">
         <table>
           <thead>
@@ -53,23 +80,6 @@ import { CurrencyPipe } from '@angular/common';
               <th>Salary</th>
               <th>Status</th>
               <th>Actions</th>
-            </tr>
-            <tr class="filter-row">
-              <td><input type="text" [(ngModel)]="searchTerm" placeholder="Filter..." class="th-filter" /></td>
-              <td><input type="text" [(ngModel)]="filterEmail" placeholder="Filter..." class="th-filter" /></td>
-              <td><input type="text" [(ngModel)]="filterSpec" placeholder="Filter..." class="th-filter" /></td>
-              <td><input type="text" [(ngModel)]="filterSubject" placeholder="Filter..." class="th-filter" /></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>
-                <select [(ngModel)]="filterStatus" class="th-filter">
-                  <option value="">All</option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </td>
-              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -147,14 +157,33 @@ import { CurrencyPipe } from '@angular/common';
       background: rgba(255,255,255,0.2);
       backdrop-filter: blur(4px);
     }
+    .filter-bar {
+      display: flex; gap: 16px; align-items: flex-end; margin-bottom: 20px; padding: 20px;
+      background: var(--card-bg); border-radius: var(--card-radius); box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-color); flex-wrap: wrap;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; }
+    .filter-group label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .filter-group select, .filter-group input {
+      padding: 10px 14px; border: 1.5px solid var(--input-border); border-radius: 8px;
+      font-size: 14px; background: #fff; transition: var(--transition); min-width: 160px;
+    }
+    .filter-group select:focus, .filter-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+    .btn-apply {
+      padding: 10px 28px; background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff;
+      border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: var(--transition);
+    }
+    .btn-apply:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+    .btn-reset {
+      padding: 10px 28px; background: #fff; color: var(--text-primary);
+      border: 1.5px solid var(--input-border); border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition);
+    }
+    .btn-reset:hover { border-color: var(--primary); color: var(--primary); }
     .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
     th { background: linear-gradient(135deg, #4f46e5, #6366f1); padding: 14px 16px; text-align: left; font-size: 11px; color: #fff; text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid #4338ca; }
     td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
     tbody tr:hover { background: #f8fafc; }
-    .filter-row td { padding: 8px 10px; background: #f1f5f9; border: 1px solid var(--border-color); }
-    .th-filter { width: 100%; padding: 6px 10px; border: 1.5px solid var(--input-border); border-radius: 6px; font-size: 13px; background: #fff; transition: var(--transition); }
-    .th-filter:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1); }
     .teacher-name { color: var(--primary); text-decoration: none; font-weight: 600; }
     .teacher-name:hover { text-decoration: underline; }
     .status-badge { padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: capitalize; }
@@ -194,36 +223,46 @@ export class TeacherListComponent {
   });
 
   searchTerm = '';
-  filterEmail = '';
-  filterSpec = '';
   filterSubject = '';
   filterStatus = '';
 
+  appliedSearch = '';
+  appliedSubject = '';
+  appliedStatus = '';
+  filterTrigger = signal(0);
+
   readonly filteredTeachers = computed(() => {
+    const trigger = this.filterTrigger();
     let teachers = this.teacherService.teachers();
-    const search = this.searchTerm.toLowerCase();
-    if (search) {
+    if (this.appliedSearch) {
+      const search = this.appliedSearch.toLowerCase();
       teachers = teachers.filter(t =>
         `${t.firstName} ${t.lastName}`.toLowerCase().includes(search)
       );
     }
-    if (this.filterEmail) {
-      const email = this.filterEmail.toLowerCase();
-      teachers = teachers.filter(t => t.email.toLowerCase().includes(email));
-    }
-    if (this.filterSpec) {
-      const spec = this.filterSpec.toLowerCase();
-      teachers = teachers.filter(t => t.specialization.toLowerCase().includes(spec));
-    }
-    if (this.filterSubject) {
-      const sub = this.filterSubject.toLowerCase();
+    if (this.appliedSubject) {
+      const sub = this.appliedSubject.toLowerCase();
       teachers = teachers.filter(t => t.subjects.some(s => s.toLowerCase().includes(sub)));
     }
-    if (this.filterStatus) {
-      teachers = teachers.filter(t => t.status === this.filterStatus);
+    if (this.appliedStatus) {
+      teachers = teachers.filter(t => t.status === this.appliedStatus);
     }
     return teachers;
   });
+
+  applyFilters(): void {
+    this.appliedSearch = this.searchTerm;
+    this.appliedSubject = this.filterSubject;
+    this.appliedStatus = this.filterStatus;
+    this.filterTrigger.update(v => v + 1);
+  }
+
+  resetFilters(): void {
+    this.searchTerm = '';
+    this.filterSubject = '';
+    this.filterStatus = '';
+    this.applyFilters();
+  }
 
   deleteTeacher(id: number): void {
     if (confirm('Are you sure you want to delete this teacher?')) {
