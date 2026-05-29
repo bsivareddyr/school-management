@@ -17,6 +17,39 @@ import { AuthService } from '../../shared/services/auth.service';
         }
       </div>
 
+      <div class="stats-grid">
+        <div class="stat-card gradient-blue">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Total Students</span>
+              <span class="stat-value">{{ totalStudents() }}</span>
+              <span class="stat-change">All enrolled</span>
+            </div>
+            <div class="stat-icon-wrap">🎓</div>
+          </div>
+        </div>
+        <div class="stat-card gradient-green">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Active</span>
+              <span class="stat-value">{{ activeStudents() }}</span>
+              <span class="stat-change positive">Currently enrolled</span>
+            </div>
+            <div class="stat-icon-wrap">✅</div>
+          </div>
+        </div>
+        <div class="stat-card gradient-red">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Inactive</span>
+              <span class="stat-value">{{ inactiveStudents() }}</span>
+              <span class="stat-change negative">Not enrolled</span>
+            </div>
+            <div class="stat-icon-wrap">⚠️</div>
+          </div>
+        </div>
+      </div>
+
       <div class="table-container">
         <table>
           <thead>
@@ -102,6 +135,43 @@ import { AuthService } from '../../shared/services/auth.service';
   styles: [`
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
     .page-header h1 { margin: 0; color: var(--text-primary); font-weight: 800; letter-spacing: -0.5px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      border-radius: var(--card-radius);
+      padding: 24px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0.1;
+      transform: translate(30%, -30%);
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); }
+    .gradient-blue { background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff; }
+    .gradient-green { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+    .gradient-red { background: linear-gradient(135deg, #dc2626, #ef4444); color: #fff; }
+    .stat-card-inner { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+    .stat-info { display: flex; flex-direction: column; gap: 4px; }
+    .stat-label { font-size: 13px; opacity: 0.85; font-weight: 500; }
+    .stat-value { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+    .stat-change { font-size: 12px; opacity: 0.7; font-weight: 500; }
+    .stat-change.positive { opacity: 0.9; }
+    .stat-change.negative { opacity: 0.9; }
+    .stat-icon-wrap {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+    }
     .btn-primary {
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: #fff;
@@ -187,6 +257,10 @@ export class StudentListComponent {
   filterSection = '';
   filterParent = '';
   filterStatus = '';
+
+  readonly totalStudents = computed(() => this.studentService.students().length);
+  readonly activeStudents = computed(() => this.studentService.students().filter(s => s.status === 'active').length);
+  readonly inactiveStudents = computed(() => this.studentService.students().filter(s => s.status === 'inactive').length);
 
   readonly filteredStudents = computed(() => {
     let students = this.studentService.students();
