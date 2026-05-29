@@ -29,6 +29,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      margin-left: 220px;
     }
     .content {
       flex: 1;

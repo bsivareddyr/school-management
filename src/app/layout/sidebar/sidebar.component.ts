@@ -40,7 +40,13 @@ interface NavItem {
       display: flex;
       flex-direction: column;
       padding: 16px 0;
-      flex-shrink: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
     }
     .logo {
       display: flex;
