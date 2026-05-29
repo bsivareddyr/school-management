@@ -18,18 +18,47 @@ import { AuthService } from '../../shared/services/auth.service';
         }
       </div>
 
-      <div class="summary-cards">
-        @for (summary of dailySummary(); track summary.class + summary.section) {
-          <div class="summary-card">
-            <h4>Class {{ summary.class }}-{{ summary.section }}</h4>
-            <div class="summary-stats">
-              <div class="stat present"><span class="num">{{ summary.present }}</span><span class="lbl">Present</span></div>
-              <div class="stat absent"><span class="num">{{ summary.absent }}</span><span class="lbl">Absent</span></div>
-              <div class="stat late"><span class="num">{{ summary.late }}</span><span class="lbl">Late</span></div>
-              <div class="stat excused"><span class="num">{{ summary.excused }}</span><span class="lbl">Excused</span></div>
+      <div class="stats-grid">
+        <div class="stat-card gradient-blue">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Total Records</span>
+              <span class="stat-value">{{ totalRecords() }}</span>
+              <span class="stat-change">Today's entries</span>
             </div>
+            <div class="stat-icon-wrap">📋</div>
           </div>
-        }
+        </div>
+        <div class="stat-card gradient-green">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Present</span>
+              <span class="stat-value">{{ totalPresent() }}</span>
+              <span class="stat-change positive">Attended</span>
+            </div>
+            <div class="stat-icon-wrap">✅</div>
+          </div>
+        </div>
+        <div class="stat-card gradient-red">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Absent</span>
+              <span class="stat-value">{{ totalAbsent() }}</span>
+              <span class="stat-change negative">Missing</span>
+            </div>
+            <div class="stat-icon-wrap">❌</div>
+          </div>
+        </div>
+        <div class="stat-card gradient-orange">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Late</span>
+              <span class="stat-value">{{ totalLate() }}</span>
+              <span class="stat-change">Arrived late</span>
+            </div>
+            <div class="stat-icon-wrap">⏰</div>
+          </div>
+        </div>
       </div>
 
       <div class="table-container">
@@ -103,17 +132,44 @@ import { AuthService } from '../../shared/services/auth.service';
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .page-header h1 { margin: 0; color: var(--text-primary); font-weight: 800; }
     .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; }
-    .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
-    .summary-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 16px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
-    .summary-card h4 { margin: 0 0 12px; color: var(--primary); font-size: 14px; }
-    .summary-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .stat { text-align: center; padding: 8px; border-radius: 10px; }
-    .stat .num { display: block; font-size: 20px; font-weight: 700; }
-    .stat .lbl { font-size: 11px; text-transform: uppercase; }
-    .stat.present { background: var(--success-bg); color: var(--success-dark); }
-    .stat.absent { background: var(--danger-bg); color: var(--danger); }
-    .stat.late { background: var(--warning-bg); color: var(--accent-dark); }
-    .stat.excused { background: var(--info-bg); color: var(--info); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      border-radius: var(--card-radius);
+      padding: 24px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0.1;
+      transform: translate(30%, -30%);
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); }
+    .gradient-blue { background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff; }
+    .gradient-green { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+    .gradient-red { background: linear-gradient(135deg, #dc2626, #ef4444); color: #fff; }
+    .gradient-orange { background: linear-gradient(135deg, #d97706, #f59e0b); color: #fff; }
+    .stat-card-inner { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+    .stat-info { display: flex; flex-direction: column; gap: 4px; }
+    .stat-label { font-size: 13px; opacity: 0.85; font-weight: 500; }
+    .stat-value { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+    .stat-change { font-size: 12px; opacity: 0.7; font-weight: 500; }
+    .stat-change.positive { opacity: 0.9; }
+    .stat-change.negative { opacity: 0.9; }
+    .stat-icon-wrap {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+    }
     .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
     th { background: #f8fafc; padding: 14px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid var(--border-color); }
@@ -170,4 +226,9 @@ export class AttendanceListComponent {
     }
     return records;
   });
+
+  readonly totalRecords = computed(() => this.filteredRecords().length);
+  readonly totalPresent = computed(() => this.filteredRecords().filter(r => r.status === 'present').length);
+  readonly totalAbsent = computed(() => this.filteredRecords().filter(r => r.status === 'absent').length);
+  readonly totalLate = computed(() => this.filteredRecords().filter(r => r.status === 'late').length);
 }
