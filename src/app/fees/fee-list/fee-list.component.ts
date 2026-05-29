@@ -18,22 +18,46 @@ import { AuthService } from '../../shared/services/auth.service';
         }
       </div>
 
-      <div class="summary-cards">
-        <div class="summary-card blue">
-          <span class="summary-label">Total Fees</span>
-          <span class="summary-value">{{ feeService.summary().totalFees | currency }}</span>
+      <div class="stats-grid">
+        <div class="stat-card gradient-blue">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Total Fees</span>
+              <span class="stat-value">{{ feeService.summary().totalFees | currency:'USD':'symbol':'1.0-0' }}</span>
+              <span class="stat-change">All fee records</span>
+            </div>
+            <div class="stat-icon-wrap">💵</div>
+          </div>
         </div>
-        <div class="summary-card green">
-          <span class="summary-label">Collected</span>
-          <span class="summary-value">{{ feeService.summary().totalCollected | currency }}</span>
+        <div class="stat-card gradient-green">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Collected</span>
+              <span class="stat-value">{{ feeService.summary().totalCollected | currency:'USD':'symbol':'1.0-0' }}</span>
+              <span class="stat-change positive">Payments received</span>
+            </div>
+            <div class="stat-icon-wrap">✅</div>
+          </div>
         </div>
-        <div class="summary-card orange">
-          <span class="summary-label">Pending</span>
-          <span class="summary-value">{{ feeService.summary().totalPending | currency }}</span>
+        <div class="stat-card gradient-orange">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Pending</span>
+              <span class="stat-value">{{ feeService.summary().totalPending | currency:'USD':'symbol':'1.0-0' }}</span>
+              <span class="stat-change">Awaiting payment</span>
+            </div>
+            <div class="stat-icon-wrap">⏳</div>
+          </div>
         </div>
-        <div class="summary-card red">
-          <span class="summary-label">Overdue</span>
-          <span class="summary-value">{{ feeService.summary().totalOverdue | currency }}</span>
+        <div class="stat-card gradient-red">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Overdue</span>
+              <span class="stat-value">{{ feeService.summary().totalOverdue | currency:'USD':'symbol':'1.0-0' }}</span>
+              <span class="stat-change negative">Past due date</span>
+            </div>
+            <div class="stat-icon-wrap">⚠️</div>
+          </div>
         </div>
       </div>
 
@@ -119,14 +143,44 @@ import { AuthService } from '../../shared/services/auth.service';
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .page-header h1 { margin: 0; color: var(--primary); }
     .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; }
-    .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
-    .summary-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 16px 20px; box-shadow: var(--card-shadow); display: flex; flex-direction: column; gap: 4px; }
-    .summary-card.blue { border-left: 4px solid #1565c0; }
-    .summary-card.green { border-left: 4px solid #2e7d32; }
-    .summary-card.orange { border-left: 4px solid #e65100; }
-    .summary-card.red { border-left: 4px solid #c62828; }
-    .summary-label { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; }
-    .summary-value { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      border-radius: var(--card-radius);
+      padding: 24px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0.1;
+      transform: translate(30%, -30%);
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); }
+    .gradient-blue { background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff; }
+    .gradient-green { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+    .gradient-orange { background: linear-gradient(135deg, #d97706, #f59e0b); color: #fff; }
+    .gradient-red { background: linear-gradient(135deg, #dc2626, #ef4444); color: #fff; }
+    .stat-card-inner { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+    .stat-info { display: flex; flex-direction: column; gap: 4px; }
+    .stat-label { font-size: 13px; opacity: 0.85; font-weight: 500; }
+    .stat-value { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+    .stat-change { font-size: 12px; opacity: 0.7; font-weight: 500; }
+    .stat-change.positive { opacity: 0.9; }
+    .stat-change.negative { opacity: 0.9; }
+    .stat-icon-wrap {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+    }
     .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
     th { background: #f8fafc; padding: 14px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid var(--border-color); }

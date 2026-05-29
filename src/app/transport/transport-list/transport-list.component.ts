@@ -19,32 +19,44 @@ import { AuthService } from '../../shared/services/auth.service';
       </div>
 
       <div class="stats-grid">
-        <div class="stat-card blue">
-          <span class="stat-icon">🚌</span>
-          <div class="stat-info">
-            <span class="stat-value">{{ transportService.totalActiveRoutes() }}</span>
-            <span class="stat-label">Active Routes</span>
+        <div class="stat-card gradient-blue">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Active Routes</span>
+              <span class="stat-value">{{ transportService.totalActiveRoutes() }}</span>
+              <span class="stat-change positive">Currently running</span>
+            </div>
+            <div class="stat-icon-wrap">🚌</div>
           </div>
         </div>
-        <div class="stat-card green">
-          <span class="stat-icon">🚐</span>
-          <div class="stat-info">
-            <span class="stat-value">{{ transportService.totalActiveVehicles() }}</span>
-            <span class="stat-label">Active Vehicles</span>
+        <div class="stat-card gradient-green">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Active Vehicles</span>
+              <span class="stat-value">{{ transportService.totalActiveVehicles() }}</span>
+              <span class="stat-change positive">In service</span>
+            </div>
+            <div class="stat-icon-wrap">🚐</div>
           </div>
         </div>
-        <div class="stat-card orange">
-          <span class="stat-icon">👤</span>
-          <div class="stat-info">
-            <span class="stat-value">{{ transportService.totalActiveDrivers() }}</span>
-            <span class="stat-label">Active Drivers</span>
+        <div class="stat-card gradient-orange">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Active Drivers</span>
+              <span class="stat-value">{{ transportService.totalActiveDrivers() }}</span>
+              <span class="stat-change">On duty</span>
+            </div>
+            <div class="stat-icon-wrap">👤</div>
           </div>
         </div>
-        <div class="stat-card purple">
-          <span class="stat-icon">🎓</span>
-          <div class="stat-info">
-            <span class="stat-value">{{ transportService.totalStudentsUsingTransport() }}</span>
-            <span class="stat-label">Students Using Transport</span>
+        <div class="stat-card gradient-purple">
+          <div class="stat-card-inner">
+            <div class="stat-info">
+              <span class="stat-label">Students Using Transport</span>
+              <span class="stat-value">{{ transportService.totalStudentsUsingTransport() }}</span>
+              <span class="stat-change">Enrolled</span>
+            </div>
+            <div class="stat-icon-wrap">🎓</div>
           </div>
         </div>
       </div>
@@ -199,16 +211,43 @@ import { AuthService } from '../../shared/services/auth.service';
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .page-header h1 { margin: 0; color: var(--primary); }
     .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .stat-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: var(--card-shadow); }
-    .stat-card.blue { border-left: 4px solid #1565c0; }
-    .stat-card.green { border-left: 4px solid #2e7d32; }
-    .stat-card.orange { border-left: 4px solid #e65100; }
-    .stat-card.purple { border-left: 4px solid #6a1b9a; }
-    .stat-icon { font-size: 32px; }
-    .stat-info { display: flex; flex-direction: column; }
-    .stat-value { font-size: 24px; font-weight: 700; color: var(--text-primary); }
-    .stat-label { font-size: 12px; color: var(--text-secondary); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      border-radius: var(--card-radius);
+      padding: 24px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0.1;
+      transform: translate(30%, -30%);
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); }
+    .gradient-blue { background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff; }
+    .gradient-green { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+    .gradient-orange { background: linear-gradient(135deg, #d97706, #f59e0b); color: #fff; }
+    .gradient-purple { background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: #fff; }
+    .stat-card-inner { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+    .stat-info { display: flex; flex-direction: column; gap: 4px; }
+    .stat-label { font-size: 13px; opacity: 0.85; font-weight: 500; }
+    .stat-value { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+    .stat-change { font-size: 12px; opacity: 0.7; font-weight: 500; }
+    .stat-change.positive { opacity: 0.9; }
+    .stat-icon-wrap {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+    }
     .section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .section-title h2 { margin: 0; color: var(--primary); }
     .tab-buttons { display: flex; gap: 8px; }
