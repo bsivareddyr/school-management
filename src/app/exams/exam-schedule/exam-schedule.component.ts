@@ -190,10 +190,11 @@ import { ExamSchedule } from '../../shared/models/exam.model';
     input:focus { outline: none; border-color: var(--primary); }
     .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
     .btn-cancel { padding: 8px 20px; border: 1.5px solid var(--input-border); border-radius: 6px; background: var(--card-bg); color: var(--text-secondary); cursor: pointer; }
-    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); }
+    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
-    th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; }
-    td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    th { background: #f8fafc; padding: 14px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid var(--border-color); }
+    td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
+    tbody tr:hover { background: #f8fafc; }
     .subject-name { font-weight: 600; color: var(--text-primary); }
     .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-transform: capitalize; }
     .status-badge.scheduled { background: var(--info-bg); color: var(--info); }

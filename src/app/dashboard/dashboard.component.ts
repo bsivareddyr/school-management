@@ -306,8 +306,8 @@ import { ExamService } from '../shared/services/exam.service';
     .quick-link:hover { background: var(--primary-bg); border-color: var(--primary-light); transform: translateX(4px); }
     .results-table { overflow-x: auto; }
     .results-table table { width: 100%; border-collapse: collapse; }
-    .results-table th { text-align: left; padding: 12px 14px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; border-bottom: 2px solid var(--border-color); }
-    .results-table td { padding: 12px 14px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    .results-table th { text-align: left; padding: 12px 14px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; border: 1px solid var(--border-color); background: #f8fafc; }
+    .results-table td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
     .results-table .exam-name { font-weight: 600; color: var(--text-primary); }
     .results-table .marks { font-weight: 700; color: var(--primary); }
     .score-bar-container { display: flex; align-items: center; gap: 8px; min-width: 120px; }

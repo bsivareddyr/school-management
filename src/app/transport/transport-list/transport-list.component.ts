@@ -77,6 +77,27 @@ import { AuthService } from '../../shared/services/auth.service';
                   <th>Actions</th>
                 }
               </tr>
+              <tr class="filter-row">
+                <td></td>
+                <td><input type="text" [(ngModel)]="filterRouteName" placeholder="Filter..." class="th-filter" /></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                  <select [(ngModel)]="filterRouteStatus" class="th-filter">
+                    <option value="">All</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </td>
+                @if (authService.hasRole('admin')) {
+                  <td></td>
+                }
+              </tr>
             </thead>
             <tbody>
               @for (route of transportService.routes(); track route.id) {
@@ -191,12 +212,16 @@ import { AuthService } from '../../shared/services/auth.service';
     .section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .section-title h2 { margin: 0; color: var(--primary); }
     .tab-buttons { display: flex; gap: 8px; }
-    .tab-buttons button { padding: 8px 16px; border: 1px solid #1a237e; border-radius: 6px; background: var(--card-bg); color: var(--primary); cursor: pointer; font-weight: 600; }
+    .tab-buttons button { padding: 8px 16px; border: 1px solid var(--primary); border-radius: 6px; background: var(--card-bg); color: var(--primary); cursor: pointer; font-weight: 600; transition: var(--transition); }
     .tab-buttons button.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; }
-    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); }
+    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
-    th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; }
-    td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    th { background: #f8fafc; padding: 14px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid var(--border-color); }
+    td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
+    tbody tr:hover { background: #f8fafc; }
+    .filter-row td { padding: 8px 10px; background: #f1f5f9; border: 1px solid var(--border-color); }
+    .th-filter { width: 100%; padding: 6px 10px; border: 1.5px solid var(--input-border); border-radius: 6px; font-size: 13px; background: #fff; transition: var(--transition); }
+    .th-filter:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1); }
     .route-name, .driver-name, .vehicle-number { color: var(--primary); font-weight: 600; text-decoration: none; }
     .route-name:hover { text-decoration: underline; }
     .capitalize { text-transform: capitalize; }
@@ -216,6 +241,8 @@ export class TransportListComponent {
   readonly transportService = inject(TransportService);
 
   activeTab = signal<'routes' | 'drivers' | 'vehicles'>('routes');
+  filterRouteName = '';
+  filterRouteStatus = '';
 
   getVehicleNumber(routeId: number): string {
     const vehicle = this.transportService.getVehicleForRoute(routeId);

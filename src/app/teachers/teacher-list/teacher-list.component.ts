@@ -15,10 +15,6 @@ import { CurrencyPipe } from '@angular/common';
         <a routerLink="/teachers/new" class="btn-primary">+ Add Teacher</a>
       </div>
 
-      <div class="filters">
-        <input type="text" placeholder="Search by name or subject..." [(ngModel)]="searchTerm" class="search-input" />
-      </div>
-
       <div class="table-container">
         <table>
           <thead>
@@ -32,6 +28,23 @@ import { CurrencyPipe } from '@angular/common';
               <th>Salary</th>
               <th>Status</th>
               <th>Actions</th>
+            </tr>
+            <tr class="filter-row">
+              <td><input type="text" [(ngModel)]="searchTerm" placeholder="Filter..." class="th-filter" /></td>
+              <td><input type="text" [(ngModel)]="filterEmail" placeholder="Filter..." class="th-filter" /></td>
+              <td><input type="text" [(ngModel)]="filterSpec" placeholder="Filter..." class="th-filter" /></td>
+              <td><input type="text" [(ngModel)]="filterSubject" placeholder="Filter..." class="th-filter" /></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <select [(ngModel)]="filterStatus" class="th-filter">
+                  <option value="">All</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -66,24 +79,26 @@ import { CurrencyPipe } from '@angular/common';
     </div>
   `,
   styles: [`
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .page-header h1 { margin: 0; color: var(--primary); }
-    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; }
-    .filters { margin-bottom: 16px; }
-    .search-input { padding: 8px 14px; border: 1.5px solid var(--input-border); border-radius: 10px; font-size: 14px; width: 300px; }
-    .search-input:focus { outline: none; border-color: var(--primary); }
-    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .page-header h1 { margin: 0; color: var(--text-primary); font-weight: 800; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; transition: var(--transition); }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
-    th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; }
-    td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    th { background: #f8fafc; padding: 14px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid var(--border-color); }
+    td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
+    tbody tr:hover { background: #f8fafc; }
+    .filter-row td { padding: 8px 10px; background: #f1f5f9; border: 1px solid var(--border-color); }
+    .th-filter { width: 100%; padding: 6px 10px; border: 1.5px solid var(--input-border); border-radius: 6px; font-size: 13px; background: #fff; transition: var(--transition); }
+    .th-filter:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1); }
     .teacher-name { color: var(--primary); text-decoration: none; font-weight: 600; }
     .teacher-name:hover { text-decoration: underline; }
-    .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-transform: capitalize; }
+    .status-badge { padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: capitalize; }
     .status-badge.active { background: var(--success-bg); color: var(--success-dark); }
     .status-badge.inactive { background: var(--danger-bg); color: var(--danger); }
     .actions { display: flex; gap: 4px; }
-    .btn-icon { background: none; border: none; cursor: pointer; font-size: 16px; padding: 4px 6px; border-radius: 4px; text-decoration: none; }
-    .btn-icon:hover { background: #f0f0f0; }
+    .btn-icon { background: none; border: none; cursor: pointer; font-size: 16px; padding: 6px 8px; border-radius: 8px; text-decoration: none; transition: var(--transition); }
+    .btn-icon:hover { background: #f1f5f9; }
     .btn-icon.delete:hover { background: var(--danger-bg); }
     .no-data { text-align: center; color: var(--text-muted); font-style: italic; padding: 40px !important; }
   `]
@@ -92,16 +107,33 @@ export class TeacherListComponent {
   private teacherService = inject(TeacherService);
 
   searchTerm = '';
+  filterEmail = '';
+  filterSpec = '';
+  filterSubject = '';
+  filterStatus = '';
 
   readonly filteredTeachers = computed(() => {
     let teachers = this.teacherService.teachers();
     const search = this.searchTerm.toLowerCase();
     if (search) {
       teachers = teachers.filter(t =>
-        `${t.firstName} ${t.lastName}`.toLowerCase().includes(search) ||
-        t.specialization.toLowerCase().includes(search) ||
-        t.subjects.some(s => s.toLowerCase().includes(search))
+        `${t.firstName} ${t.lastName}`.toLowerCase().includes(search)
       );
+    }
+    if (this.filterEmail) {
+      const email = this.filterEmail.toLowerCase();
+      teachers = teachers.filter(t => t.email.toLowerCase().includes(email));
+    }
+    if (this.filterSpec) {
+      const spec = this.filterSpec.toLowerCase();
+      teachers = teachers.filter(t => t.specialization.toLowerCase().includes(spec));
+    }
+    if (this.filterSubject) {
+      const sub = this.filterSubject.toLowerCase();
+      teachers = teachers.filter(t => t.subjects.some(s => s.toLowerCase().includes(sub)));
+    }
+    if (this.filterStatus) {
+      teachers = teachers.filter(t => t.status === this.filterStatus);
     }
     return teachers;
   });

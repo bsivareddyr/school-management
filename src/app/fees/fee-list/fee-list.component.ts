@@ -37,27 +37,6 @@ import { AuthService } from '../../shared/services/auth.service';
         </div>
       </div>
 
-      <div class="filters">
-        <input type="text" placeholder="Search by student name..." [(ngModel)]="searchTerm" class="search-input" />
-        <select [(ngModel)]="filterStatus" class="filter-select">
-          <option value="">All Status</option>
-          <option value="paid">Paid</option>
-          <option value="pending">Pending</option>
-          <option value="overdue">Overdue</option>
-          <option value="partial">Partial</option>
-        </select>
-        <select [(ngModel)]="filterType" class="filter-select">
-          <option value="">All Types</option>
-          <option value="tuition">Tuition</option>
-          <option value="exam">Exam</option>
-          <option value="library">Library</option>
-          <option value="transport">Transport</option>
-          <option value="lab">Lab</option>
-          <option value="sports">Sports</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-
       <div class="table-container">
         <table>
           <thead>
@@ -71,6 +50,36 @@ import { AuthService } from '../../shared/services/auth.service';
               <th>Due Date</th>
               <th>Status</th>
               <th>Actions</th>
+            </tr>
+            <tr class="filter-row">
+              <td></td>
+              <td><input type="text" [(ngModel)]="searchTerm" placeholder="Filter..." class="th-filter" /></td>
+              <td></td>
+              <td>
+                <select [(ngModel)]="filterType" class="th-filter">
+                  <option value="">All</option>
+                  <option value="tuition">Tuition</option>
+                  <option value="exam">Exam</option>
+                  <option value="library">Library</option>
+                  <option value="transport">Transport</option>
+                  <option value="lab">Lab</option>
+                  <option value="sports">Sports</option>
+                  <option value="other">Other</option>
+                </select>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <select [(ngModel)]="filterStatus" class="th-filter">
+                  <option value="">All</option>
+                  <option value="paid">Paid</option>
+                  <option value="pending">Pending</option>
+                  <option value="overdue">Overdue</option>
+                  <option value="partial">Partial</option>
+                </select>
+              </td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -118,13 +127,14 @@ import { AuthService } from '../../shared/services/auth.service';
     .summary-card.red { border-left: 4px solid #c62828; }
     .summary-label { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; }
     .summary-value { font-size: 22px; font-weight: 700; color: var(--text-primary); }
-    .filters { display: flex; gap: 12px; margin-bottom: 16px; }
-    .search-input, .filter-select { padding: 8px 14px; border: 1.5px solid var(--input-border); border-radius: 10px; font-size: 14px; }
-    .search-input { flex: 1; }
-    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); }
+    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
-    th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; }
-    td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    th { background: #f8fafc; padding: 14px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid var(--border-color); }
+    td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
+    tbody tr:hover { background: #f8fafc; }
+    .filter-row td { padding: 8px 10px; background: #f1f5f9; border: 1px solid var(--border-color); }
+    .th-filter { width: 100%; padding: 6px 10px; border: 1.5px solid var(--input-border); border-radius: 6px; font-size: 13px; background: #fff; transition: var(--transition); }
+    .th-filter:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1); }
     .student-name { font-weight: 600; color: var(--text-primary); }
     .capitalize { text-transform: capitalize; }
     .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-transform: capitalize; }

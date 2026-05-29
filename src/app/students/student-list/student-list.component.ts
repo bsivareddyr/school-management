@@ -17,26 +17,6 @@ import { AuthService } from '../../shared/services/auth.service';
         }
       </div>
 
-      <div class="filters">
-        <input
-          type="text"
-          placeholder="Search by name..."
-          [(ngModel)]="searchTerm"
-          class="search-input"
-        />
-        <select [(ngModel)]="filterClass" class="filter-select">
-          <option value="">All Classes</option>
-          @for (cls of studentService.classes(); track cls) {
-            <option [value]="cls">Class {{ cls }}</option>
-          }
-        </select>
-        <select [(ngModel)]="filterStatus" class="filter-select">
-          <option value="">All Status</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
-      </div>
-
       <div class="table-container">
         <table>
           <thead>
@@ -49,6 +29,36 @@ import { AuthService } from '../../shared/services/auth.service';
               <th>Phone</th>
               <th>Status</th>
               <th>Actions</th>
+            </tr>
+            <tr class="filter-row">
+              <td><input type="text" [(ngModel)]="filterRoll" placeholder="Filter..." class="th-filter" /></td>
+              <td><input type="text" [(ngModel)]="searchTerm" placeholder="Filter..." class="th-filter" /></td>
+              <td>
+                <select [(ngModel)]="filterClass" class="th-filter">
+                  <option value="">All</option>
+                  @for (cls of studentService.classes(); track cls) {
+                    <option [value]="cls">{{ cls }}</option>
+                  }
+                </select>
+              </td>
+              <td>
+                <select [(ngModel)]="filterSection" class="th-filter">
+                  <option value="">All</option>
+                  @for (sec of ['A','B','C','D']; track sec) {
+                    <option [value]="sec">{{ sec }}</option>
+                  }
+                </select>
+              </td>
+              <td><input type="text" [(ngModel)]="filterParent" placeholder="Filter..." class="th-filter" /></td>
+              <td></td>
+              <td>
+                <select [(ngModel)]="filterStatus" class="th-filter">
+                  <option value="">All</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -104,17 +114,6 @@ import { AuthService } from '../../shared/services/auth.service';
       border: none;
     }
     .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
-    .filters { display: flex; gap: 12px; margin-bottom: 20px; }
-    .search-input, .filter-select {
-      padding: 10px 16px;
-      border: 1.5px solid var(--input-border);
-      border-radius: var(--input-radius);
-      font-size: 14px;
-      background: #f8fafc;
-      transition: var(--transition);
-    }
-    .search-input { flex: 1; }
-    .search-input:focus, .filter-select:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
     .table-container {
       background: var(--card-bg);
       border-radius: var(--card-radius);
@@ -132,9 +131,25 @@ import { AuthService } from '../../shared/services/auth.service';
       text-transform: uppercase;
       letter-spacing: 0.7px;
       font-weight: 700;
+      border: 1px solid var(--border-color);
     }
-    td { padding: 14px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--text-primary); }
-    tr:hover { background: #f8fafc; }
+    td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; color: var(--text-primary); }
+    tbody tr:hover { background: #f8fafc; }
+    .filter-row td {
+      padding: 8px 10px;
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+    }
+    .th-filter {
+      width: 100%;
+      padding: 6px 10px;
+      border: 1.5px solid var(--input-border);
+      border-radius: 6px;
+      font-size: 13px;
+      background: #fff;
+      transition: var(--transition);
+    }
+    .th-filter:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1); }
     .student-name { color: var(--primary); text-decoration: none; font-weight: 600; }
     .student-name:hover { text-decoration: underline; }
     .status-badge {
@@ -167,21 +182,34 @@ export class StudentListComponent {
   readonly authService = inject(AuthService);
 
   searchTerm = '';
+  filterRoll = '';
   filterClass = '';
+  filterSection = '';
+  filterParent = '';
   filterStatus = '';
 
   readonly filteredStudents = computed(() => {
     let students = this.studentService.students();
     const search = this.searchTerm.toLowerCase();
+    const roll = this.filterRoll.toLowerCase();
+    const parent = this.filterParent.toLowerCase();
 
     if (search) {
       students = students.filter(s =>
-        `${s.firstName} ${s.lastName}`.toLowerCase().includes(search) ||
-        s.rollNumber.toLowerCase().includes(search)
+        `${s.firstName} ${s.lastName}`.toLowerCase().includes(search)
       );
+    }
+    if (roll) {
+      students = students.filter(s => s.rollNumber.toLowerCase().includes(roll));
     }
     if (this.filterClass) {
       students = students.filter(s => s.class === this.filterClass);
+    }
+    if (this.filterSection) {
+      students = students.filter(s => s.section === this.filterSection);
+    }
+    if (parent) {
+      students = students.filter(s => s.parentName.toLowerCase().includes(parent));
     }
     if (this.filterStatus) {
       students = students.filter(s => s.status === this.filterStatus);

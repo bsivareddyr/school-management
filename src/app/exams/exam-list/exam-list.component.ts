@@ -41,30 +41,6 @@ import { AuthService } from '../../shared/services/auth.service';
         </div>
       </div>
 
-      <div class="filters">
-        <select [ngModel]="classFilter()" (ngModelChange)="classFilter.set($event)" class="filter-select">
-          <option value="">All Classes</option>
-          <option value="8">Class 8</option>
-          <option value="9">Class 9</option>
-          <option value="10">Class 10</option>
-        </select>
-        <select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)" class="filter-select">
-          <option value="">All Status</option>
-          <option value="scheduled">Scheduled</option>
-          <option value="ongoing">Ongoing</option>
-          <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-        <select [ngModel]="typeFilter()" (ngModelChange)="typeFilter.set($event)" class="filter-select">
-          <option value="">All Types</option>
-          <option value="midterm">Mid-Term</option>
-          <option value="final">Final</option>
-          <option value="unit_test">Unit Test</option>
-          <option value="quarterly">Quarterly</option>
-          <option value="half_yearly">Half Yearly</option>
-        </select>
-      </div>
-
       <div class="table-container">
         <table>
           <thead>
@@ -77,6 +53,40 @@ import { AuthService } from '../../shared/services/auth.service';
               <th>End Date</th>
               <th>Status</th>
               <th>Actions</th>
+            </tr>
+            <tr class="filter-row">
+              <td><input type="text" [(ngModel)]="nameFilter" placeholder="Filter..." class="th-filter" /></td>
+              <td>
+                <select [ngModel]="typeFilter()" (ngModelChange)="typeFilter.set($event)" class="th-filter">
+                  <option value="">All</option>
+                  <option value="midterm">Mid-Term</option>
+                  <option value="final">Final</option>
+                  <option value="unit_test">Unit Test</option>
+                  <option value="quarterly">Quarterly</option>
+                  <option value="half_yearly">Half Yearly</option>
+                </select>
+              </td>
+              <td>
+                <select [ngModel]="classFilter()" (ngModelChange)="classFilter.set($event)" class="th-filter">
+                  <option value="">All</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                </select>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)" class="th-filter">
+                  <option value="">All</option>
+                  <option value="scheduled">Scheduled</option>
+                  <option value="ongoing">Ongoing</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -123,13 +133,14 @@ import { AuthService } from '../../shared/services/auth.service';
     .stat-info { display: flex; flex-direction: column; }
     .stat-value { font-size: 24px; font-weight: 700; color: var(--text-primary); }
     .stat-label { font-size: 12px; color: var(--text-secondary); }
-    .filters { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-    .filter-select { padding: 8px 14px; border: 1.5px solid var(--input-border); border-radius: 10px; font-size: 14px; }
-    .filter-select:focus { outline: none; border-color: var(--primary); }
-    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); }
+    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
-    th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; }
-    td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    th { background: #f8fafc; padding: 14px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid var(--border-color); }
+    td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
+    tbody tr:hover { background: #f8fafc; }
+    .filter-row td { padding: 8px 10px; background: #f1f5f9; border: 1px solid var(--border-color); }
+    .th-filter { width: 100%; padding: 6px 10px; border: 1.5px solid var(--input-border); border-radius: 6px; font-size: 13px; background: #fff; transition: var(--transition); }
+    .th-filter:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1); }
     .exam-name { color: var(--primary); text-decoration: none; font-weight: 600; }
     .exam-name:hover { text-decoration: underline; }
     .capitalize { text-transform: capitalize; }
@@ -152,6 +163,7 @@ export class ExamListComponent {
   classFilter = signal('');
   statusFilter = signal('');
   typeFilter = signal('');
+  nameFilter = '';
 
   readonly filteredExams = computed(() => {
     let exams = this.examService.exams();
@@ -161,6 +173,10 @@ export class ExamListComponent {
     if (classF) exams = exams.filter(e => e.class === classF);
     if (statusF) exams = exams.filter(e => e.status === statusF);
     if (typeF) exams = exams.filter(e => e.type === typeF);
+    if (this.nameFilter) {
+      const name = this.nameFilter.toLowerCase();
+      exams = exams.filter(e => e.name.toLowerCase().includes(name));
+    }
     return exams;
   });
 

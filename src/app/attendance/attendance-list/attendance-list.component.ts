@@ -18,31 +18,6 @@ import { AuthService } from '../../shared/services/auth.service';
         }
       </div>
 
-      <div class="filters">
-        <div class="form-group">
-          <label>Date</label>
-          <input type="date" [(ngModel)]="selectedDate" class="filter-input" />
-        </div>
-        <div class="form-group">
-          <label>Class</label>
-          <select [(ngModel)]="selectedClass" class="filter-select">
-            <option value="">All Classes</option>
-            @for (cls of studentService.classes(); track cls) {
-              <option [value]="cls">Class {{ cls }}</option>
-            }
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Section</label>
-          <select [(ngModel)]="selectedSection" class="filter-select">
-            <option value="">All Sections</option>
-            @for (sec of studentService.sections(); track sec) {
-              <option [value]="sec">{{ sec }}</option>
-            }
-          </select>
-        </div>
-      </div>
-
       <div class="summary-cards">
         @for (summary of dailySummary(); track summary.class + summary.section) {
           <div class="summary-card">
@@ -68,6 +43,37 @@ import { AuthService } from '../../shared/services/auth.service';
               <th>Status</th>
               <th>Remarks</th>
               <th>Marked By</th>
+            </tr>
+            <tr class="filter-row">
+              <td><input type="text" [(ngModel)]="filterName" placeholder="Filter..." class="th-filter" /></td>
+              <td>
+                <select [(ngModel)]="selectedClass" class="th-filter">
+                  <option value="">All</option>
+                  @for (cls of studentService.classes(); track cls) {
+                    <option [value]="cls">{{ cls }}</option>
+                  }
+                </select>
+              </td>
+              <td>
+                <select [(ngModel)]="selectedSection" class="th-filter">
+                  <option value="">All</option>
+                  @for (sec of studentService.sections(); track sec) {
+                    <option [value]="sec">{{ sec }}</option>
+                  }
+                </select>
+              </td>
+              <td><input type="date" [(ngModel)]="selectedDate" class="th-filter" /></td>
+              <td>
+                <select [(ngModel)]="filterStatus" class="th-filter">
+                  <option value="">All</option>
+                  <option value="present">Present</option>
+                  <option value="absent">Absent</option>
+                  <option value="late">Late</option>
+                  <option value="excused">Excused</option>
+                </select>
+              </td>
+              <td></td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -95,15 +101,10 @@ import { AuthService } from '../../shared/services/auth.service';
   `,
   styles: [`
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .page-header h1 { margin: 0; color: var(--primary); }
+    .page-header h1 { margin: 0; color: var(--text-primary); font-weight: 800; }
     .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; }
-    .filters { display: flex; gap: 16px; margin-bottom: 16px; background: var(--card-bg); padding: 16px; border-radius: var(--card-radius); box-shadow: var(--card-shadow); }
-    .form-group { display: flex; flex-direction: column; gap: 4px; }
-    .form-group label { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; }
-    .filter-input, .filter-select { padding: 8px 12px; border: 1.5px solid var(--input-border); border-radius: 10px; font-size: 14px; }
-    .filter-input:focus, .filter-select:focus { outline: none; border-color: var(--primary); }
     .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
-    .summary-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 16px; box-shadow: var(--card-shadow); }
+    .summary-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 16px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     .summary-card h4 { margin: 0 0 12px; color: var(--primary); font-size: 14px; }
     .summary-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .stat { text-align: center; padding: 8px; border-radius: 10px; }
@@ -113,12 +114,16 @@ import { AuthService } from '../../shared/services/auth.service';
     .stat.absent { background: var(--danger-bg); color: var(--danger); }
     .stat.late { background: var(--warning-bg); color: var(--accent-dark); }
     .stat.excused { background: var(--info-bg); color: var(--info); }
-    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); }
+    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
-    th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; }
-    td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    th { background: #f8fafc; padding: 14px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid var(--border-color); }
+    td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
+    tbody tr:hover { background: #f8fafc; }
+    .filter-row td { padding: 8px 10px; background: #f1f5f9; border: 1px solid var(--border-color); }
+    .th-filter { width: 100%; padding: 6px 10px; border: 1.5px solid var(--input-border); border-radius: 6px; font-size: 13px; background: #fff; transition: var(--transition); }
+    .th-filter:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1); }
     .student-name { font-weight: 600; color: var(--text-primary); }
-    .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-transform: capitalize; }
+    .status-badge { padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: capitalize; }
     .status-badge.present { background: var(--success-bg); color: var(--success-dark); }
     .status-badge.absent { background: var(--danger-bg); color: var(--danger); }
     .status-badge.late { background: var(--warning-bg); color: var(--accent-dark); }
@@ -134,6 +139,8 @@ export class AttendanceListComponent {
   selectedDate = new Date().toISOString().split('T')[0];
   selectedClass = '';
   selectedSection = '';
+  filterName = '';
+  filterStatus = '';
 
   readonly dailySummary = computed(() => {
     let summaries = this.attendanceService.getDailySummary(this.selectedDate);
@@ -153,6 +160,13 @@ export class AttendanceListComponent {
     }
     if (this.selectedSection) {
       records = records.filter(r => r.section === this.selectedSection);
+    }
+    if (this.filterName) {
+      const name = this.filterName.toLowerCase();
+      records = records.filter(r => r.studentName.toLowerCase().includes(name));
+    }
+    if (this.filterStatus) {
+      records = records.filter(r => r.status === this.filterStatus);
     }
     return records;
   });

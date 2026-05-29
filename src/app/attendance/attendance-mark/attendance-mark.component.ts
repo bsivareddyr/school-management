@@ -126,8 +126,8 @@ interface StudentAttendanceEntry {
     .btn-quick.red { background: #c62828; }
     .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); }
     table { width: 100%; border-collapse: collapse; }
-    th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; }
-    td { padding: 10px 16px; border-bottom: 1px solid var(--border-color); }
+    th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; border: 1px solid var(--border-color); }
+    td { padding: 14px 16px; border: 1px solid var(--border-color); }
     .absent-row { background: #fff8f8; }
     .student-name { font-weight: 600; }
     .status-buttons { display: flex; gap: 4px; }
