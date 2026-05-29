@@ -92,20 +92,20 @@ import { Teacher } from '../../shared/models/teacher.model';
     </div>
   `,
   styles: [`
-    .back-link { color: #1a237e; text-decoration: none; font-size: 14px; }
-    h1 { color: #1a237e; margin: 8px 0 20px; }
-    .form-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .back-link { color: var(--primary); text-decoration: none; font-size: 14px; }
+    h1 { color: var(--primary); margin: 8px 0 20px; }
+    .form-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 24px; box-shadow: var(--card-shadow); }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group.full-width { grid-column: span 2; }
-    .form-group label { font-weight: 600; font-size: 13px; color: #555; }
+    .form-group label { font-weight: 700; font-size: 13px; color: var(--text-secondary); }
     .form-group input, .form-group select, .form-group textarea {
-      padding: 9px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;
+      padding: 9px 12px; border: 1.5px solid var(--input-border); border-radius: 10px; font-size: 14px;
     }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #1a237e; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
     .form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
-    .btn-primary { background: #1a237e; color: #fff; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-    .btn-secondary { background: #f5f5f5; color: #333; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; border: none; padding: 10px 24px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+    .btn-secondary { background: #f8fafc; color: var(--text-primary); padding: 10px 24px; border-radius: 10px; text-decoration: none; font-weight: 600; }
   `]
 })
 export class TeacherFormComponent implements OnInit {

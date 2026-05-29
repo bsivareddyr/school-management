@@ -224,8 +224,8 @@ import { ExamService } from '../shared/services/exam.service';
     </div>
   `,
   styles: [`
-    .dashboard h1 { margin: 0 0 4px; color: #1a237e; }
-    .welcome { color: #666; margin: 0 0 24px; }
+    .dashboard h1 { margin: 0 0 4px; color: var(--text-primary); font-weight: 800; letter-spacing: -0.5px; }
+    .welcome { color: var(--text-secondary); margin: 0 0 28px; font-size: 15px; }
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -233,85 +233,91 @@ import { ExamService } from '../shared/services/exam.service';
       margin-bottom: 24px;
     }
     .stat-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      padding: 22px;
       display: flex;
       align-items: center;
       gap: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      border: 1px solid var(--border-color);
     }
-    .stat-card.blue { border-left: 4px solid #1565c0; }
-    .stat-card.green { border-left: 4px solid #2e7d32; }
-    .stat-card.orange { border-left: 4px solid #e65100; }
-    .stat-card.purple { border-left: 4px solid #6a1b9a; }
-    .stat-card.teal { border-left: 4px solid #00695c; }
-    .stat-card.pink { border-left: 4px solid #ad1457; }
-    .stat-icon { font-size: 36px; }
+    .stat-card:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-2px); }
+    .stat-card.blue { border-left: 4px solid var(--info); }
+    .stat-card.green { border-left: 4px solid var(--success); }
+    .stat-card.orange { border-left: 4px solid var(--warning); }
+    .stat-card.purple { border-left: 4px solid var(--primary); }
+    .stat-card.teal { border-left: 4px solid #0d9488; }
+    .stat-card.pink { border-left: 4px solid #ec4899; }
+    .stat-icon { font-size: 36px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
     .stat-info { display: flex; flex-direction: column; }
-    .stat-value { font-size: 28px; font-weight: 700; color: #333; }
-    .stat-label { font-size: 13px; color: #666; }
+    .stat-value { font-size: 28px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px; }
+    .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
     .section-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
       gap: 16px;
     }
     .section-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      padding: 24px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-color);
     }
-    .section-card h3 { margin: 0 0 16px; color: #1a237e; font-size: 16px; }
+    .section-card h3 { margin: 0 0 18px; color: var(--text-primary); font-size: 16px; font-weight: 700; }
     .fee-overview { display: flex; flex-direction: column; gap: 10px; }
-    .fee-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
-    .fee-label { color: #666; font-size: 14px; }
-    .fee-value { font-weight: 600; font-size: 15px; }
-    .text-green { color: #2e7d32; }
-    .text-orange { color: #e65100; }
-    .text-red { color: #c62828; }
-    .attendance-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
-    .class-label { font-weight: 500; color: #333; }
+    .fee-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+    .fee-label { color: var(--text-secondary); font-size: 14px; }
+    .fee-value { font-weight: 700; font-size: 15px; }
+    .text-green { color: var(--success-dark); }
+    .text-orange { color: var(--accent-dark); }
+    .text-red { color: var(--danger); }
+    .attendance-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+    .class-label { font-weight: 600; color: var(--text-primary); font-size: 14px; }
     .attendance-stats { display: flex; gap: 6px; }
     .badge {
-      padding: 2px 8px;
-      border-radius: 10px;
+      padding: 3px 10px;
+      border-radius: 8px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
     }
-    .badge.green { background: #e8f5e9; color: #2e7d32; }
-    .badge.red { background: #ffebee; color: #c62828; }
-    .badge.orange { background: #fff3e0; color: #e65100; }
-    .badge.blue { background: #e3f2fd; color: #1565c0; }
-    .no-data { color: #999; font-style: italic; text-align: center; padding: 20px; }
+    .badge.green { background: var(--success-bg); color: var(--success-dark); }
+    .badge.red { background: var(--danger-bg); color: var(--danger); }
+    .badge.orange { background: var(--warning-bg); color: var(--accent-dark); }
+    .badge.blue { background: var(--info-bg); color: var(--info); }
+    .no-data { color: var(--text-muted); font-style: italic; text-align: center; padding: 20px; }
     .quick-links { display: flex; flex-direction: column; gap: 8px; }
     .quick-link {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 12px 16px;
-      background: #f5f5f5;
-      border-radius: 8px;
+      gap: 10px;
+      padding: 13px 18px;
+      background: #f8fafc;
+      border-radius: 12px;
       text-decoration: none;
-      color: #333;
-      font-weight: 500;
-      transition: background 0.2s;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 14px;
+      transition: var(--transition);
+      border: 1px solid transparent;
     }
-    .quick-link:hover { background: #e8eaf6; }
+    .quick-link:hover { background: var(--primary-bg); border-color: var(--primary-light); transform: translateX(4px); }
     .results-table { overflow-x: auto; }
     .results-table table { width: 100%; border-collapse: collapse; }
-    .results-table th { text-align: left; padding: 10px 12px; font-size: 12px; color: #888; text-transform: uppercase; border-bottom: 2px solid #f0f0f0; }
-    .results-table td { padding: 10px 12px; border-bottom: 1px solid #f5f5f5; font-size: 14px; }
-    .results-table .exam-name { font-weight: 500; color: #333; }
-    .results-table .marks { font-weight: 600; color: #1a237e; }
-    .score-bar-container { display: flex; align-items: center; gap: 8px; }
-    .score-bar { height: 8px; border-radius: 4px; min-width: 4px; transition: width 0.3s; }
-    .score-bar.pass { background: linear-gradient(90deg, #66bb6a, #43a047); }
-    .score-bar.fail { background: linear-gradient(90deg, #ef5350, #e53935); }
-    .score-text { font-size: 13px; font-weight: 600; color: #555; white-space: nowrap; }
-    .result-badge { padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; }
-    .result-badge.pass { background: #e8f5e9; color: #2e7d32; }
-    .result-badge.fail { background: #ffebee; color: #c62828; }
+    .results-table th { text-align: left; padding: 12px 14px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; border-bottom: 2px solid var(--border-color); }
+    .results-table td { padding: 12px 14px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    .results-table .exam-name { font-weight: 600; color: var(--text-primary); }
+    .results-table .marks { font-weight: 700; color: var(--primary); }
+    .score-bar-container { display: flex; align-items: center; gap: 8px; min-width: 120px; }
+    .score-bar { height: 8px; border-radius: 4px; min-width: 4px; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .score-bar.pass { background: linear-gradient(90deg, var(--success), #34d399); }
+    .score-bar.fail { background: linear-gradient(90deg, var(--danger), #f87171); }
+    .score-text { font-size: 13px; font-weight: 700; color: var(--text-secondary); white-space: nowrap; }
+    .result-badge { padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
+    .result-badge.pass { background: var(--success-bg); color: var(--success-dark); }
+    .result-badge.fail { background: var(--danger-bg); color: var(--danger); }
   `]
 })
 export class DashboardComponent {

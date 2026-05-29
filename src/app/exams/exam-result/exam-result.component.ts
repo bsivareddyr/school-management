@@ -108,68 +108,68 @@ import { AuthService } from '../../shared/services/auth.service';
     </div>
   `,
   styles: [`
-    .back-link { color: #1a237e; text-decoration: none; font-size: 14px; }
+    .back-link { color: var(--primary); text-decoration: none; font-size: 14px; }
     .back-link:hover { text-decoration: underline; }
     .result-header { margin: 16px 0 20px; }
-    .result-header h1 { margin: 0; color: #1a237e; }
-    .subtitle { color: #666; margin: 4px 0 0; }
-    .score-card { display: flex; gap: 32px; align-items: center; background: #fff; border-radius: 16px; padding: 28px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-left: 6px solid #ccc; margin-bottom: 28px; }
-    .score-card.passed { border-left-color: #2e7d32; }
-    .score-card.failed { border-left-color: #c62828; }
+    .result-header h1 { margin: 0; color: var(--primary); }
+    .subtitle { color: var(--text-secondary); margin: 4px 0 0; }
+    .score-card { display: flex; gap: 32px; align-items: center; background: var(--card-bg); border-radius: 16px; padding: 28px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-left: 6px solid #ccc; margin-bottom: 28px; }
+    .score-card.passed { border-left-color: var(--success-dark); }
+    .score-card.failed { border-left-color: var(--danger); }
     .score-circle { width: 120px; height: 120px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
     .passed .score-circle { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
     .failed .score-circle { background: linear-gradient(135deg, #ffebee, #ffcdd2); }
     .score-percent { font-size: 28px; font-weight: 800; }
-    .passed .score-percent { color: #2e7d32; }
-    .failed .score-percent { color: #c62828; }
-    .score-label { font-size: 12px; color: #888; text-transform: uppercase; }
+    .passed .score-percent { color: var(--success-dark); }
+    .failed .score-percent { color: var(--danger); }
+    .score-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
     .score-details { flex: 1; }
-    .score-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; color: #555; }
+    .score-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--text-secondary); }
     .score-row:last-child { border-bottom: none; }
-    .score-val { font-weight: 600; color: #333; }
-    .score-val.highlight { color: #1a237e; font-size: 16px; }
-    .result-badge { padding: 3px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; }
-    .result-badge.pass { background: #e8f5e9; color: #2e7d32; }
-    .result-badge.fail { background: #ffebee; color: #c62828; }
+    .score-val { font-weight: 700; color: var(--text-primary); }
+    .score-val.highlight { color: var(--primary); font-size: 16px; }
+    .result-badge { padding: 3px 12px; border-radius: var(--card-radius); font-size: 12px; font-weight: 700; }
+    .result-badge.pass { background: var(--success-bg); color: var(--success-dark); }
+    .result-badge.fail { background: var(--danger-bg); color: var(--danger); }
 
-    .section-title { color: #1a237e; font-size: 18px; margin: 0 0 16px; }
+    .section-title { color: var(--primary); font-size: 18px; margin: 0 0 16px; }
     .answers-list { display: flex; flex-direction: column; gap: 16px; }
-    .answer-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #e0e0e0; }
+    .answer-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid #e0e0e0; }
     .answer-card.correct { border-left-color: #66bb6a; }
     .answer-card.wrong { border-left-color: #ef5350; }
     .answer-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-    .q-num { background: #1a237e; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-    .q-type-badge { padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
-    .q-type-badge.mcq { background: #e3f2fd; color: #1565c0; }
+    .q-num { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 3px 10px; border-radius: var(--card-radius); font-size: 12px; font-weight: 700; }
+    .q-type-badge { padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+    .q-type-badge.mcq { background: var(--info-bg); color: var(--info); }
     .q-type-badge.short_answer { background: #f3e5f5; color: #7b1fa2; }
-    .marks-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; background: #ffebee; color: #c62828; margin-left: auto; }
-    .marks-badge.full { background: #e8f5e9; color: #2e7d32; }
-    .q-text { font-size: 15px; color: #333; line-height: 1.5; margin: 0 0 12px; }
+    .marks-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; background: var(--danger-bg); color: var(--danger); margin-left: auto; }
+    .marks-badge.full { background: var(--success-bg); color: var(--success-dark); }
+    .q-text { font-size: 15px; color: var(--text-primary); line-height: 1.5; margin: 0 0 12px; }
 
     .options-review { display: flex; flex-direction: column; gap: 8px; }
-    .option-review { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 2px solid #e8e8e8; border-radius: 8px; font-size: 14px; }
+    .option-review { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 2px solid #e8e8e8; border-radius: 10px; font-size: 14px; }
     .option-review.correct-option { border-color: #66bb6a; background: #f1f8e9; }
     .option-review.selected-wrong { border-color: #ef5350; background: #fff5f5; }
     .option-review.selected-correct { border-color: #66bb6a; background: #f1f8e9; }
-    .opt-letter { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #f5f5f5; font-weight: 600; font-size: 12px; color: #666; flex-shrink: 0; }
+    .opt-letter { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #f8fafc; font-weight: 700; font-size: 12px; color: var(--text-secondary); flex-shrink: 0; }
     .correct-option .opt-letter { background: #66bb6a; color: #fff; }
     .selected-wrong .opt-letter { background: #ef5350; color: #fff; }
     .opt-text { flex: 1; }
     .opt-icon { font-size: 16px; font-weight: 700; }
-    .correct-icon { color: #2e7d32; }
-    .wrong-icon { color: #c62828; }
+    .correct-icon { color: var(--success-dark); }
+    .wrong-icon { color: var(--danger); }
 
     .short-answer-review { display: flex; flex-direction: column; gap: 8px; }
     .answer-row { display: flex; gap: 12px; align-items: baseline; }
-    .answer-label { font-size: 13px; color: #888; font-weight: 500; min-width: 110px; }
-    .answer-value { font-size: 14px; font-weight: 500; }
-    .correct-text { color: #2e7d32; }
-    .wrong-text { color: #c62828; }
+    .answer-label { font-size: 13px; color: var(--text-muted); font-weight: 600; min-width: 110px; }
+    .answer-value { font-size: 14px; font-weight: 600; }
+    .correct-text { color: var(--success-dark); }
+    .wrong-text { color: var(--danger); }
     .inline-icon { font-size: 14px; margin-left: 4px; }
-    .inline-icon.wrong { color: #c62828; }
+    .inline-icon.wrong { color: var(--danger); }
 
-    .no-result { text-align: center; padding: 40px; color: #999; }
-    .btn-primary { background: #1a237e; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 12px; }
+    .no-result { text-align: center; padding: 40px; color: var(--text-muted); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; display: inline-block; margin-top: 12px; }
   `]
 })
 export class ExamResultComponent {

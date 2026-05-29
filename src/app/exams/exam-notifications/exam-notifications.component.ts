@@ -72,35 +72,35 @@ import { AuthService } from '../../shared/services/auth.service';
     </div>
   `,
   styles: [`
-    .back-link { color: #1a237e; text-decoration: none; font-size: 14px; }
+    .back-link { color: var(--primary); text-decoration: none; font-size: 14px; }
     .back-link:hover { text-decoration: underline; }
-    h1 { color: #1a237e; margin: 12px 0 4px; }
-    h2 { color: #1a237e; margin: 24px 0 12px; }
-    .subtitle { color: #666; margin: 0 0 20px; font-size: 14px; }
-    .form-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .form-card h3 { margin: 0 0 16px; color: #1a237e; }
+    h1 { color: var(--primary); margin: 12px 0 4px; }
+    h2 { color: var(--primary); margin: 24px 0 12px; }
+    .subtitle { color: var(--text-secondary); margin: 0 0 20px; font-size: 14px; }
+    .form-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 24px; box-shadow: var(--card-shadow); }
+    .form-card h3 { margin: 0 0 16px; color: var(--primary); }
     .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-    label { font-size: 13px; font-weight: 600; color: #333; }
-    select, textarea { padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; font-family: inherit; }
-    select:focus, textarea:focus { outline: none; border-color: #1a237e; }
+    label { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+    select, textarea { padding: 10px 14px; border: 1.5px solid var(--input-border); border-radius: 10px; font-size: 14px; font-family: inherit; }
+    select:focus, textarea:focus { outline: none; border-color: var(--primary); }
     textarea { resize: vertical; min-height: 100px; }
     .template-buttons { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    .btn-template { padding: 8px 16px; border: 1px solid #e0e0e0; border-radius: 6px; background: #f5f5f5; cursor: pointer; font-size: 13px; }
-    .btn-template:hover { background: #e8eaf6; border-color: #1a237e; }
+    .btn-template { padding: 8px 16px; border: 1px solid var(--border-color); border-radius: 6px; background: #f8fafc; cursor: pointer; font-size: 13px; }
+    .btn-template:hover { background: var(--primary-bg); border-color: var(--primary); }
     .form-actions { display: flex; justify-content: flex-end; gap: 12px; }
-    .btn-cancel { padding: 10px 24px; border: 1px solid #ddd; border-radius: 8px; text-decoration: none; color: #666; font-weight: 500; display: flex; align-items: center; }
-    .btn-primary { background: #1a237e; color: #fff; padding: 10px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .btn-cancel { padding: 10px 24px; border: 1.5px solid var(--input-border); border-radius: 10px; text-decoration: none; color: var(--text-secondary); font-weight: 600; display: flex; align-items: center; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 24px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
     .notifications-list { display: flex; flex-direction: column; gap: 12px; }
-    .notif-card { background: #fff; border-radius: 10px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #2e7d32; }
+    .notif-card { background: var(--card-bg); border-radius: 10px; padding: 16px; box-shadow: var(--card-shadow); border-left: 4px solid #2e7d32; }
     .notif-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .notif-badge { padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: 600; text-transform: capitalize; }
-    .notif-badge.sent { background: #e8f5e9; color: #2e7d32; }
-    .notif-date { font-size: 12px; color: #999; }
-    .notif-message { color: #333; font-size: 14px; margin: 0 0 8px; }
-    .notif-footer { display: flex; justify-content: space-between; font-size: 12px; color: #666; }
-    .success-banner { background: #e8f5e9; color: #2e7d32; padding: 12px 20px; border-radius: 8px; margin-top: 16px; font-weight: 500; }
-    .no-data { text-align: center; color: #999; font-style: italic; }
+    .notif-badge { padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; text-transform: capitalize; }
+    .notif-badge.sent { background: var(--success-bg); color: var(--success-dark); }
+    .notif-date { font-size: 12px; color: var(--text-muted); }
+    .notif-message { color: var(--text-primary); font-size: 14px; margin: 0 0 8px; }
+    .notif-footer { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); }
+    .success-banner { background: var(--success-bg); color: var(--success-dark); padding: 12px 20px; border-radius: 10px; margin-top: 16px; font-weight: 600; }
+    .no-data { text-align: center; color: var(--text-muted); font-style: italic; }
   `]
 })
 export class ExamNotificationsComponent {

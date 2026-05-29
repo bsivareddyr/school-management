@@ -50,21 +50,21 @@ import { TeacherService } from '../../shared/services/teacher.service';
     </div>
   `,
   styles: [`
-    .back-link { color: #1a237e; text-decoration: none; font-size: 14px; }
+    .back-link { color: var(--primary); text-decoration: none; font-size: 14px; }
     .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-    .page-header h1 { margin: 8px 0 0; color: #1a237e; }
-    .btn-primary { background: #1a237e; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    .page-header h1 { margin: 8px 0 0; color: var(--primary); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; }
     .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 16px; }
-    .detail-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .detail-card h3 { margin: 0 0 16px; color: #1a237e; font-size: 16px; }
+    .detail-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 20px; box-shadow: var(--card-shadow); }
+    .detail-card h3 { margin: 0 0 16px; color: var(--primary); font-size: 16px; }
     .info-grid { display: flex; flex-direction: column; gap: 10px; }
-    .info-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f5f5f5; }
-    .label { color: #666; font-size: 14px; }
-    .value { font-weight: 500; font-size: 14px; }
+    .info-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); }
+    .label { color: var(--text-secondary); font-size: 14px; }
+    .value { font-weight: 600; font-size: 14px; }
     .capitalize { text-transform: capitalize; }
-    .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; text-transform: capitalize; }
-    .status-badge.active { background: #e8f5e9; color: #2e7d32; }
-    .status-badge.inactive { background: #ffebee; color: #c62828; }
+    .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-transform: capitalize; }
+    .status-badge.active { background: var(--success-bg); color: var(--success-dark); }
+    .status-badge.inactive { background: var(--danger-bg); color: var(--danger); }
   `]
 })
 export class TeacherDetailComponent {

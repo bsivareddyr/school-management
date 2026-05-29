@@ -176,39 +176,39 @@ import { AuthService } from '../../shared/services/auth.service';
   `,
   styles: [`
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .page-header h1 { margin: 0; color: #1a237e; }
-    .btn-primary { background: #1a237e; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    .page-header h1 { margin: 0; color: var(--primary); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; }
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .stat-card { background: #fff; border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .stat-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: var(--card-shadow); }
     .stat-card.blue { border-left: 4px solid #1565c0; }
     .stat-card.green { border-left: 4px solid #2e7d32; }
     .stat-card.orange { border-left: 4px solid #e65100; }
     .stat-card.purple { border-left: 4px solid #6a1b9a; }
     .stat-icon { font-size: 32px; }
     .stat-info { display: flex; flex-direction: column; }
-    .stat-value { font-size: 24px; font-weight: 700; color: #333; }
-    .stat-label { font-size: 12px; color: #666; }
+    .stat-value { font-size: 24px; font-weight: 700; color: var(--text-primary); }
+    .stat-label { font-size: 12px; color: var(--text-secondary); }
     .section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .section-title h2 { margin: 0; color: #1a237e; }
+    .section-title h2 { margin: 0; color: var(--primary); }
     .tab-buttons { display: flex; gap: 8px; }
-    .tab-buttons button { padding: 8px 16px; border: 1px solid #1a237e; border-radius: 6px; background: #fff; color: #1a237e; cursor: pointer; font-weight: 500; }
-    .tab-buttons button.active { background: #1a237e; color: #fff; }
-    .table-container { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .tab-buttons button { padding: 8px 16px; border: 1px solid #1a237e; border-radius: 6px; background: var(--card-bg); color: var(--primary); cursor: pointer; font-weight: 600; }
+    .tab-buttons button.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; }
+    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); }
     table { width: 100%; border-collapse: collapse; }
-    th { background: #f5f5f5; padding: 12px 16px; text-align: left; font-size: 13px; color: #666; text-transform: uppercase; }
-    td { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-    .route-name, .driver-name, .vehicle-number { color: #1a237e; font-weight: 500; text-decoration: none; }
+    th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; }
+    td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    .route-name, .driver-name, .vehicle-number { color: var(--primary); font-weight: 600; text-decoration: none; }
     .route-name:hover { text-decoration: underline; }
     .capitalize { text-transform: capitalize; }
-    .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; text-transform: capitalize; }
-    .status-badge.active { background: #e8f5e9; color: #2e7d32; }
-    .status-badge.inactive { background: #ffebee; color: #c62828; }
-    .status-badge.maintenance { background: #fff3e0; color: #e65100; }
+    .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-transform: capitalize; }
+    .status-badge.active { background: var(--success-bg); color: var(--success-dark); }
+    .status-badge.inactive { background: var(--danger-bg); color: var(--danger); }
+    .status-badge.maintenance { background: var(--warning-bg); color: var(--accent-dark); }
     .actions { display: flex; gap: 4px; }
     .btn-icon { background: none; border: none; cursor: pointer; font-size: 16px; padding: 4px 6px; border-radius: 4px; text-decoration: none; }
     .btn-icon:hover { background: #f0f0f0; }
-    .btn-icon.delete:hover { background: #ffebee; }
-    .no-data { text-align: center; color: #999; font-style: italic; padding: 40px !important; }
+    .btn-icon.delete:hover { background: var(--danger-bg); }
+    .no-data { text-align: center; color: var(--text-muted); font-style: italic; padding: 40px !important; }
   `]
 })
 export class TransportListComponent {

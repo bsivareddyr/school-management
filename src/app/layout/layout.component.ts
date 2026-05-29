@@ -29,13 +29,13 @@ import { SidebarComponent } from './sidebar/sidebar.component';
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      margin-left: 220px;
+      margin-left: 250px;
     }
     .content {
       flex: 1;
-      padding: 24px;
+      padding: 28px 32px;
       overflow-y: auto;
-      background: #f0f2f5;
+      background: var(--body-bg);
     }
   `]
 })

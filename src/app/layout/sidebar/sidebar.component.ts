@@ -16,30 +16,43 @@ interface NavItem {
   template: `
     <nav class="sidebar">
       <div class="logo">
-        <span class="logo-icon">🏫</span>
-        <span class="logo-text">SMS</span>
+        <div class="logo-icon-wrap">
+          <span class="logo-icon">🏫</span>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">SMS</span>
+          <span class="logo-sub">School Portal</span>
+        </div>
       </div>
-      @for (item of visibleNavItems; track item.route) {
-        <a
-          class="nav-item"
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
-        >
-          <span class="nav-icon">{{ item.icon }}</span>
-          <span class="nav-label">{{ item.label }}</span>
-        </a>
-      }
+      <div class="nav-section">
+        <span class="nav-section-label">MENU</span>
+        @for (item of visibleNavItems; track item.route) {
+          <a
+            class="nav-item"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+          >
+            <span class="nav-icon">{{ item.icon }}</span>
+            <span class="nav-label">{{ item.label }}</span>
+          </a>
+        }
+      </div>
+      <div class="sidebar-footer">
+        <div class="footer-badge">
+          <span class="footer-dot"></span>
+          <span class="footer-text">v2.0</span>
+        </div>
+      </div>
     </nav>
   `,
   styles: [`
     .sidebar {
-      width: 220px;
-      background: #1a237e;
+      width: 250px;
+      background: var(--sidebar-bg);
       color: #fff;
       display: flex;
       flex-direction: column;
-      padding: 16px 0;
       position: fixed;
       top: 0;
       left: 0;
@@ -51,34 +64,81 @@ interface NavItem {
     .logo {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 0 20px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      gap: 12px;
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .logo-icon-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-icon { font-size: 22px; }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-title { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+    .logo-sub { font-size: 11px; color: var(--text-muted); font-weight: 400; margin-top: -2px; }
+    .nav-section { flex: 1; padding: 16px 12px; }
+    .nav-section-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.3);
+      letter-spacing: 1.5px;
+      padding: 0 12px;
       margin-bottom: 8px;
     }
-    .logo-icon { font-size: 28px; }
-    .logo-text { font-size: 22px; font-weight: 700; }
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 12px 20px;
-      color: rgba(255,255,255,0.7);
+      gap: 12px;
+      padding: 11px 14px;
+      color: rgba(255, 255, 255, 0.55);
       text-decoration: none;
-      transition: all 0.2s;
+      transition: var(--transition);
       font-size: 14px;
+      border-radius: 10px;
+      margin-bottom: 2px;
+      font-weight: 500;
     }
     .nav-item:hover {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
+      background: var(--sidebar-hover);
+      color: rgba(255, 255, 255, 0.9);
     }
     .nav-item.active {
-      background: rgba(255,255,255,0.15);
+      background: var(--sidebar-active);
       color: #fff;
-      border-right: 3px solid #ffd54f;
+      font-weight: 600;
     }
-    .nav-icon { font-size: 18px; width: 24px; text-align: center; }
-    .nav-label { font-weight: 500; }
+    .nav-item.active .nav-icon { transform: scale(1.1); }
+    .nav-icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .nav-label { font-weight: inherit; }
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .footer-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+    .footer-text { font-size: 12px; color: var(--text-muted); }
   `]
 })
 export class SidebarComponent {

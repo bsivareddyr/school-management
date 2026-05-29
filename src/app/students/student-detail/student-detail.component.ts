@@ -84,28 +84,29 @@ import { AuthService } from '../../shared/services/auth.service';
     </div>
   `,
   styles: [`
-    .back-link { color: #1a237e; text-decoration: none; font-size: 14px; }
+    .back-link { color: var(--primary); text-decoration: none; font-size: 14px; font-weight: 500; }
     .back-link:hover { text-decoration: underline; }
-    .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-    .page-header h1 { margin: 8px 0 0; color: #1a237e; }
-    .btn-primary { background: #1a237e; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+    .page-header h1 { margin: 8px 0 0; color: var(--text-primary); font-weight: 800; letter-spacing: -0.5px; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 22px; border-radius: 10px; text-decoration: none; font-weight: 700; transition: var(--transition); }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
     .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 16px; }
-    .detail-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .detail-card h3 { margin: 0 0 16px; color: #1a237e; font-size: 16px; }
+    .detail-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 24px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
+    .detail-card h3 { margin: 0 0 18px; color: var(--text-primary); font-size: 16px; font-weight: 700; }
     .info-grid { display: flex; flex-direction: column; gap: 10px; }
-    .info-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f5f5f5; }
-    .label { color: #666; font-size: 14px; }
-    .value { font-weight: 500; font-size: 14px; color: #333; }
+    .info-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+    .label { color: var(--text-secondary); font-size: 14px; }
+    .value { font-weight: 600; font-size: 14px; color: var(--text-primary); }
     .capitalize { text-transform: capitalize; }
-    .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; text-transform: capitalize; }
-    .status-badge.active, .status-badge.present, .status-badge.paid { background: #e8f5e9; color: #2e7d32; }
-    .status-badge.inactive, .status-badge.absent, .status-badge.overdue { background: #ffebee; color: #c62828; }
-    .status-badge.late, .status-badge.partial, .status-badge.pending { background: #fff3e0; color: #e65100; }
-    .status-badge.excused { background: #e3f2fd; color: #1565c0; }
-    .attendance-row, .fee-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
-    .fee-type { font-weight: 500; text-transform: capitalize; margin-right: 8px; }
-    .fee-amount { color: #666; font-size: 14px; }
-    .no-data { color: #999; font-style: italic; text-align: center; padding: 20px; }
+    .status-badge { padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: capitalize; }
+    .status-badge.active, .status-badge.present, .status-badge.paid { background: var(--success-bg); color: var(--success-dark); }
+    .status-badge.inactive, .status-badge.absent, .status-badge.overdue { background: var(--danger-bg); color: var(--danger); }
+    .status-badge.late, .status-badge.partial, .status-badge.pending { background: var(--warning-bg); color: var(--accent-dark); }
+    .status-badge.excused { background: var(--info-bg); color: var(--info); }
+    .attendance-row, .fee-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+    .fee-type { font-weight: 600; text-transform: capitalize; margin-right: 8px; }
+    .fee-amount { color: var(--text-secondary); font-size: 14px; }
+    .no-data { color: var(--text-muted); font-style: italic; text-align: center; padding: 20px; }
   `]
 })
 export class StudentDetailComponent {

@@ -95,35 +95,35 @@ import { AuthService } from '../../shared/services/auth.service';
   `,
   styles: [`
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .page-header h1 { margin: 0; color: #1a237e; }
-    .btn-primary { background: #1a237e; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; }
-    .filters { display: flex; gap: 16px; margin-bottom: 16px; background: #fff; padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .page-header h1 { margin: 0; color: var(--primary); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; }
+    .filters { display: flex; gap: 16px; margin-bottom: 16px; background: var(--card-bg); padding: 16px; border-radius: var(--card-radius); box-shadow: var(--card-shadow); }
     .form-group { display: flex; flex-direction: column; gap: 4px; }
-    .form-group label { font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; }
-    .filter-input, .filter-select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
-    .filter-input:focus, .filter-select:focus { outline: none; border-color: #1a237e; }
+    .form-group label { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; }
+    .filter-input, .filter-select { padding: 8px 12px; border: 1.5px solid var(--input-border); border-radius: 10px; font-size: 14px; }
+    .filter-input:focus, .filter-select:focus { outline: none; border-color: var(--primary); }
     .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
-    .summary-card { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .summary-card h4 { margin: 0 0 12px; color: #1a237e; font-size: 14px; }
+    .summary-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 16px; box-shadow: var(--card-shadow); }
+    .summary-card h4 { margin: 0 0 12px; color: var(--primary); font-size: 14px; }
     .summary-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .stat { text-align: center; padding: 8px; border-radius: 8px; }
+    .stat { text-align: center; padding: 8px; border-radius: 10px; }
     .stat .num { display: block; font-size: 20px; font-weight: 700; }
     .stat .lbl { font-size: 11px; text-transform: uppercase; }
-    .stat.present { background: #e8f5e9; color: #2e7d32; }
-    .stat.absent { background: #ffebee; color: #c62828; }
-    .stat.late { background: #fff3e0; color: #e65100; }
-    .stat.excused { background: #e3f2fd; color: #1565c0; }
-    .table-container { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .stat.present { background: var(--success-bg); color: var(--success-dark); }
+    .stat.absent { background: var(--danger-bg); color: var(--danger); }
+    .stat.late { background: var(--warning-bg); color: var(--accent-dark); }
+    .stat.excused { background: var(--info-bg); color: var(--info); }
+    .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); }
     table { width: 100%; border-collapse: collapse; }
-    th { background: #f5f5f5; padding: 12px 16px; text-align: left; font-size: 13px; color: #666; text-transform: uppercase; }
-    td { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-    .student-name { font-weight: 500; color: #333; }
-    .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; text-transform: capitalize; }
-    .status-badge.present { background: #e8f5e9; color: #2e7d32; }
-    .status-badge.absent { background: #ffebee; color: #c62828; }
-    .status-badge.late { background: #fff3e0; color: #e65100; }
-    .status-badge.excused { background: #e3f2fd; color: #1565c0; }
-    .no-data { text-align: center; color: #999; font-style: italic; padding: 40px !important; }
+    th { background: #f8fafc; padding: 12px 16px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; }
+    td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    .student-name { font-weight: 600; color: var(--text-primary); }
+    .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-transform: capitalize; }
+    .status-badge.present { background: var(--success-bg); color: var(--success-dark); }
+    .status-badge.absent { background: var(--danger-bg); color: var(--danger); }
+    .status-badge.late { background: var(--warning-bg); color: var(--accent-dark); }
+    .status-badge.excused { background: var(--info-bg); color: var(--info); }
+    .no-data { text-align: center; color: var(--text-muted); font-style: italic; padding: 40px !important; }
   `]
 })
 export class AttendanceListComponent {

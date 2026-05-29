@@ -61,19 +61,19 @@ import { TransportRoute } from '../../shared/models/transport.model';
     </div>
   `,
   styles: [`
-    .back-link { color: #1a237e; text-decoration: none; font-size: 14px; }
+    .back-link { color: var(--primary); text-decoration: none; font-size: 14px; }
     .back-link:hover { text-decoration: underline; }
-    h1 { color: #1a237e; margin: 12px 0 20px; }
-    .form-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    h1 { color: var(--primary); margin: 12px 0 20px; }
+    .form-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 24px; box-shadow: var(--card-shadow); }
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 16px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group.full-width { margin-bottom: 16px; }
-    label { font-size: 13px; font-weight: 600; color: #333; }
-    input, select { padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
-    input:focus, select:focus { outline: none; border-color: #1a237e; }
+    label { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+    input, select { padding: 10px 14px; border: 1.5px solid var(--input-border); border-radius: 10px; font-size: 14px; }
+    input:focus, select:focus { outline: none; border-color: var(--primary); }
     .form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; }
-    .btn-cancel { padding: 10px 24px; border: 1px solid #ddd; border-radius: 8px; text-decoration: none; color: #666; font-weight: 500; display: flex; align-items: center; }
-    .btn-primary { background: #1a237e; color: #fff; padding: 10px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .btn-cancel { padding: 10px 24px; border: 1.5px solid var(--input-border); border-radius: 10px; text-decoration: none; color: var(--text-secondary); font-weight: 600; display: flex; align-items: center; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 24px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
   `]
 })
 export class TransportFormComponent {

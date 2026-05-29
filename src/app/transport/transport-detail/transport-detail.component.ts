@@ -103,31 +103,31 @@ import { AuthService } from '../../shared/services/auth.service';
     </div>
   `,
   styles: [`
-    .back-link { color: #1a237e; text-decoration: none; font-size: 14px; }
+    .back-link { color: var(--primary); text-decoration: none; font-size: 14px; }
     .back-link:hover { text-decoration: underline; }
     .page-header { display: flex; justify-content: space-between; align-items: center; margin: 12px 0 20px; }
-    .page-header h1 { margin: 0; color: #1a237e; }
-    .btn-primary { background: #1a237e; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    .page-header h1 { margin: 0; color: var(--primary); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; }
     .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 16px; margin-bottom: 16px; }
-    .detail-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .detail-card { background: var(--card-bg); border-radius: var(--card-radius); padding: 20px; box-shadow: var(--card-shadow); }
     .detail-card.full-width { grid-column: 1 / -1; }
-    .detail-card h3 { margin: 0 0 16px; color: #1a237e; font-size: 16px; }
-    .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
-    .label { color: #666; font-size: 14px; }
-    .value { font-weight: 500; font-size: 14px; }
+    .detail-card h3 { margin: 0 0 16px; color: var(--primary); font-size: 16px; }
+    .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+    .label { color: var(--text-secondary); font-size: 14px; }
+    .value { font-weight: 600; font-size: 14px; }
     .capitalize { text-transform: capitalize; }
     .stops-list { display: flex; flex-direction: column; gap: 8px; }
-    .stop-item { display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: #f5f5f5; border-radius: 8px; }
-    .stop-number { width: 28px; height: 28px; background: #1a237e; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
-    .stop-name { font-weight: 500; }
-    .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; text-transform: capitalize; }
-    .status-badge.active { background: #e8f5e9; color: #2e7d32; }
-    .status-badge.inactive { background: #ffebee; color: #c62828; }
-    .status-badge.maintenance { background: #fff3e0; color: #e65100; }
+    .stop-item { display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: #f8fafc; border-radius: 10px; }
+    .stop-number { width: 28px; height: 28px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+    .stop-name { font-weight: 600; }
+    .status-badge { padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-transform: capitalize; }
+    .status-badge.active { background: var(--success-bg); color: var(--success-dark); }
+    .status-badge.inactive { background: var(--danger-bg); color: var(--danger); }
+    .status-badge.maintenance { background: var(--warning-bg); color: var(--accent-dark); }
     table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-    th { background: #f5f5f5; padding: 10px 14px; text-align: left; font-size: 13px; color: #666; text-transform: uppercase; }
-    td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-    .no-data { text-align: center; color: #999; font-style: italic; }
+    th { background: #f8fafc; padding: 10px 14px; text-align: left; font-size: 13px; color: var(--text-secondary); text-transform: uppercase; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    .no-data { text-align: center; color: var(--text-muted); font-style: italic; }
   `]
 })
 export class TransportDetailComponent {
