@@ -42,20 +42,20 @@ import { AuthService } from '../../shared/services/auth.service';
       </div>
 
       <div class="filters">
-        <select [(ngModel)]="classFilter" class="filter-select">
+        <select [ngModel]="classFilter()" (ngModelChange)="classFilter.set($event)" class="filter-select">
           <option value="">All Classes</option>
           <option value="8">Class 8</option>
           <option value="9">Class 9</option>
           <option value="10">Class 10</option>
         </select>
-        <select [(ngModel)]="statusFilter" class="filter-select">
+        <select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)" class="filter-select">
           <option value="">All Status</option>
           <option value="scheduled">Scheduled</option>
           <option value="ongoing">Ongoing</option>
           <option value="completed">Completed</option>
           <option value="cancelled">Cancelled</option>
         </select>
-        <select [(ngModel)]="typeFilter" class="filter-select">
+        <select [ngModel]="typeFilter()" (ngModelChange)="typeFilter.set($event)" class="filter-select">
           <option value="">All Types</option>
           <option value="midterm">Mid-Term</option>
           <option value="final">Final</option>
@@ -149,15 +149,18 @@ export class ExamListComponent {
   readonly authService = inject(AuthService);
   readonly examService = inject(ExamService);
 
-  classFilter = '';
-  statusFilter = '';
-  typeFilter = '';
+  classFilter = signal('');
+  statusFilter = signal('');
+  typeFilter = signal('');
 
   readonly filteredExams = computed(() => {
     let exams = this.examService.exams();
-    if (this.classFilter) exams = exams.filter(e => e.class === this.classFilter);
-    if (this.statusFilter) exams = exams.filter(e => e.status === this.statusFilter);
-    if (this.typeFilter) exams = exams.filter(e => e.type === this.typeFilter);
+    const classF = this.classFilter();
+    const statusF = this.statusFilter();
+    const typeF = this.typeFilter();
+    if (classF) exams = exams.filter(e => e.class === classF);
+    if (statusF) exams = exams.filter(e => e.status === statusF);
+    if (typeF) exams = exams.filter(e => e.type === typeF);
     return exams;
   });
 
