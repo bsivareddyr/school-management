@@ -61,6 +61,49 @@ import { AuthService } from '../../shared/services/auth.service';
         </div>
       </div>
 
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>Class</label>
+          <select [(ngModel)]="selectedClass">
+            <option value="">All Classes</option>
+            @for (cls of studentService.classes(); track cls) {
+              <option [value]="cls">{{ cls }}</option>
+            }
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Section</label>
+          <select [(ngModel)]="selectedSection">
+            <option value="">All Sections</option>
+            @for (sec of studentService.sections(); track sec) {
+              <option [value]="sec">{{ sec }}</option>
+            }
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Date</label>
+          <input type="date" [(ngModel)]="selectedDate" />
+        </div>
+        <div class="filter-group">
+          <label>Status</label>
+          <select [(ngModel)]="filterStatus">
+            <option value="">All Status</option>
+            <option value="present">Present</option>
+            <option value="absent">Absent</option>
+            <option value="late">Late</option>
+            <option value="excused">Excused</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>&nbsp;</label>
+          <button class="btn-apply" (click)="applyFilters()">Apply</button>
+        </div>
+        <div class="filter-group">
+          <label>&nbsp;</label>
+          <button class="btn-reset" (click)="resetFilters()">Reset</button>
+        </div>
+      </div>
+
       <div class="table-container">
         <table>
           <thead>
@@ -72,37 +115,6 @@ import { AuthService } from '../../shared/services/auth.service';
               <th>Status</th>
               <th>Remarks</th>
               <th>Marked By</th>
-            </tr>
-            <tr class="filter-row">
-              <td><input type="text" [(ngModel)]="filterName" placeholder="Filter..." class="th-filter" /></td>
-              <td>
-                <select [(ngModel)]="selectedClass" class="th-filter">
-                  <option value="">All</option>
-                  @for (cls of studentService.classes(); track cls) {
-                    <option [value]="cls">{{ cls }}</option>
-                  }
-                </select>
-              </td>
-              <td>
-                <select [(ngModel)]="selectedSection" class="th-filter">
-                  <option value="">All</option>
-                  @for (sec of studentService.sections(); track sec) {
-                    <option [value]="sec">{{ sec }}</option>
-                  }
-                </select>
-              </td>
-              <td><input type="date" [(ngModel)]="selectedDate" class="th-filter" /></td>
-              <td>
-                <select [(ngModel)]="filterStatus" class="th-filter">
-                  <option value="">All</option>
-                  <option value="present">Present</option>
-                  <option value="absent">Absent</option>
-                  <option value="late">Late</option>
-                  <option value="excused">Excused</option>
-                </select>
-              </td>
-              <td></td>
-              <td></td>
             </tr>
           </thead>
           <tbody>
@@ -170,14 +182,71 @@ import { AuthService } from '../../shared/services/auth.service';
       background: rgba(255,255,255,0.2);
       backdrop-filter: blur(4px);
     }
+    .filter-bar {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      margin-bottom: 20px;
+      padding: 20px;
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 6px; }
+    .filter-group label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .filter-group select,
+    .filter-group input {
+      padding: 10px 14px;
+      border: 1.5px solid var(--input-border);
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fff;
+      transition: var(--transition);
+      min-width: 160px;
+    }
+    .filter-group select:focus,
+    .filter-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+    .btn-apply {
+      padding: 10px 28px;
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-apply:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+    .btn-reset {
+      padding: 10px 28px;
+      background: #fff;
+      color: var(--text-primary);
+      border: 1.5px solid var(--input-border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-reset:hover { border-color: var(--primary); color: var(--primary); }
     .table-container { background: var(--card-bg); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; }
     th { background: linear-gradient(135deg, #4f46e5, #6366f1); padding: 14px 16px; text-align: left; font-size: 11px; color: #fff; text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; border: 1px solid #4338ca; }
     td { padding: 14px 16px; border: 1px solid var(--border-color); font-size: 14px; }
     tbody tr:hover { background: #f8fafc; }
-    .filter-row td { padding: 8px 10px; background: #f1f5f9; border: 1px solid var(--border-color); }
-    .th-filter { width: 100%; padding: 6px 10px; border: 1.5px solid var(--input-border); border-radius: 6px; font-size: 13px; background: #fff; transition: var(--transition); }
-    .th-filter:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1); }
     .student-name { font-weight: 600; color: var(--text-primary); }
     .status-badge { padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; text-transform: capitalize; }
     .status-badge.present { background: var(--success-bg); color: var(--success-dark); }
@@ -198,31 +267,22 @@ export class AttendanceListComponent {
   filterName = '';
   filterStatus = '';
 
-  readonly dailySummary = computed(() => {
-    let summaries = this.attendanceService.getDailySummary(this.selectedDate);
-    if (this.selectedClass) {
-      summaries = summaries.filter(s => s.class === this.selectedClass);
-    }
-    if (this.selectedSection) {
-      summaries = summaries.filter(s => s.section === this.selectedSection);
-    }
-    return summaries;
-  });
+  appliedDate = this.selectedDate;
+  appliedClass = '';
+  appliedSection = '';
+  appliedStatus = '';
 
   readonly filteredRecords = computed(() => {
-    let records = this.attendanceService.getByDate(this.selectedDate);
-    if (this.selectedClass) {
-      records = records.filter(r => r.class === this.selectedClass);
+    const trigger = this.filterTrigger();
+    let records = this.attendanceService.getByDate(this.appliedDate);
+    if (this.appliedClass) {
+      records = records.filter(r => r.class === this.appliedClass);
     }
-    if (this.selectedSection) {
-      records = records.filter(r => r.section === this.selectedSection);
+    if (this.appliedSection) {
+      records = records.filter(r => r.section === this.appliedSection);
     }
-    if (this.filterName) {
-      const name = this.filterName.toLowerCase();
-      records = records.filter(r => r.studentName.toLowerCase().includes(name));
-    }
-    if (this.filterStatus) {
-      records = records.filter(r => r.status === this.filterStatus);
+    if (this.appliedStatus) {
+      records = records.filter(r => r.status === this.appliedStatus);
     }
     return records;
   });
@@ -231,4 +291,22 @@ export class AttendanceListComponent {
   readonly totalPresent = computed(() => this.filteredRecords().filter(r => r.status === 'present').length);
   readonly totalAbsent = computed(() => this.filteredRecords().filter(r => r.status === 'absent').length);
   readonly totalLate = computed(() => this.filteredRecords().filter(r => r.status === 'late').length);
+
+  filterTrigger = signal(0);
+
+  applyFilters(): void {
+    this.appliedDate = this.selectedDate;
+    this.appliedClass = this.selectedClass;
+    this.appliedSection = this.selectedSection;
+    this.appliedStatus = this.filterStatus;
+    this.filterTrigger.update(v => v + 1);
+  }
+
+  resetFilters(): void {
+    this.selectedDate = new Date().toISOString().split('T')[0];
+    this.selectedClass = '';
+    this.selectedSection = '';
+    this.filterStatus = '';
+    this.applyFilters();
+  }
 }
