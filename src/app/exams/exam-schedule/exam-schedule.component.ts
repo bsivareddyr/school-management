@@ -105,9 +105,7 @@ import { ExamSchedule } from '../../shared/models/exam.model';
                 <th>Room</th>
                 <th>Max Marks</th>
                 <th>Pass Marks</th>
-                @if (authService.hasRole('admin')) {
-                  <th>Actions</th>
-                }
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -120,11 +118,23 @@ import { ExamSchedule } from '../../shared/models/exam.model';
                   <td>{{ schedule.room }}</td>
                   <td>{{ schedule.maxMarks }}</td>
                   <td>{{ schedule.passingMarks }}</td>
-                  @if (authService.hasRole('admin')) {
-                    <td>
-                      <button class="btn-icon delete" (click)="deleteScheduleEntry(schedule.id)" title="Remove">🗑</button>
-                    </td>
-                  }
+                  <td>
+                    <div class="actions">
+                      @if (authService.hasRole('student')) {
+                        @if (getSubmission(schedule.id); as sub) {
+                          <a [routerLink]="['/exams', exam!.id, 'schedule', schedule.id, 'result']" class="btn-action result" title="View Result">📊 Result</a>
+                        } @else {
+                          <a [routerLink]="['/exams', exam!.id, 'take', schedule.id]" class="btn-action take" title="Take Exam">✏️ Take Exam</a>
+                        }
+                      }
+                      @if (authService.hasRole('admin') || authService.hasRole('teacher')) {
+                        <a [routerLink]="['/exams', exam!.id, 'schedule', schedule.id, 'questions']" class="btn-action questions" title="Manage Questions">📝 Questions ({{ getQuestionCount(schedule.id) }})</a>
+                      }
+                      @if (authService.hasRole('admin')) {
+                        <button class="btn-icon delete" (click)="deleteScheduleEntry(schedule.id)" title="Remove">🗑</button>
+                      }
+                    </div>
+                  </td>
                 </tr>
               } @empty {
                 <tr><td colspan="8" class="no-data">No schedule entries yet. Add subjects above.</td></tr>
@@ -190,6 +200,14 @@ import { ExamSchedule } from '../../shared/models/exam.model';
     .status-badge.ongoing { background: #fff3e0; color: #e65100; }
     .status-badge.completed { background: #e8f5e9; color: #2e7d32; }
     .status-badge.cancelled { background: #ffebee; color: #c62828; }
+    .actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .btn-action { padding: 4px 10px; border-radius: 6px; font-size: 12px; text-decoration: none; font-weight: 500; white-space: nowrap; }
+    .btn-action.take { background: #e3f2fd; color: #1565c0; }
+    .btn-action.take:hover { background: #bbdefb; }
+    .btn-action.result { background: #e8f5e9; color: #2e7d32; }
+    .btn-action.result:hover { background: #c8e6c9; }
+    .btn-action.questions { background: #f3e5f5; color: #7b1fa2; }
+    .btn-action.questions:hover { background: #e1bee7; }
     .btn-icon { background: none; border: none; cursor: pointer; font-size: 16px; padding: 4px 6px; border-radius: 4px; }
     .btn-icon.delete:hover { background: #ffebee; }
     .notifications-list { display: flex; flex-direction: column; gap: 12px; }
@@ -239,5 +257,15 @@ export class ExamScheduleComponent {
       this.examService.deleteSchedule(id);
       this.schedules = this.examService.getSchedulesByExamId(this.exam!.id);
     }
+  }
+
+  getQuestionCount(scheduleId: number): number {
+    return this.examService.getQuestionsByScheduleId(scheduleId).length;
+  }
+
+  getSubmission(scheduleId: number) {
+    const user = this.authService.user();
+    if (!user) return undefined;
+    return this.examService.getSubmissionByStudentAndSchedule(user.id, scheduleId);
   }
 }

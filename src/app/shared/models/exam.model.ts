@@ -24,6 +24,37 @@ export interface ExamSchedule {
   passingMarks: number;
 }
 
+export interface ExamQuestion {
+  id: number;
+  scheduleId: number;
+  questionNumber: number;
+  questionText: string;
+  type: 'mcq' | 'short_answer';
+  options?: string[];
+  correctAnswer: string;
+  marks: number;
+}
+
+export interface ExamSubmission {
+  id: number;
+  examId: number;
+  scheduleId: number;
+  studentId: number;
+  studentName: string;
+  answers: StudentAnswer[];
+  totalMarks: number;
+  obtainedMarks: number;
+  submittedAt: string;
+  status: 'submitted' | 'graded';
+}
+
+export interface StudentAnswer {
+  questionId: number;
+  answer: string;
+  isCorrect: boolean;
+  marksAwarded: number;
+}
+
 export interface ExamNotification {
   id: number;
   examId: number;
